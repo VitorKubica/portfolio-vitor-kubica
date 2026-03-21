@@ -19,6 +19,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow: hidden;
 }
 
 body {
@@ -36,19 +37,10 @@ body {
   color: var(--background);
 }
 
-/* ── Scroll snap (desktop ≥1024px) ── */
-@media (min-width: 1024px) {
-  html {
-    overflow: hidden;
-  }
-  main {
-    scroll-snap-type: y mandatory;
-    overflow-y: auto;
-    height: 100dvh;
-  }
-}
-
 main {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  height: 100dvh;
   outline: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -60,38 +52,32 @@ main {
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  scroll-snap-align: start;
 }
 
-@media (min-width: 1024px) {
-  .home-section {
-    min-height: 100dvh;
-    scroll-snap-align: start;
-  }
+/* ── Cavalier entrance animation ── */
+.home-section[aria-hidden="true"]:not(.scrolled) .cavalier h1,
+.home-section[aria-hidden="true"]:not(.scrolled) .cavalier h2 {
+  opacity: 0;
+  transform: translate3d(0, 50px, 0);
 }
-
-/* ── Cavalier entrance animation (desktop) ── */
-@media (min-width: 1024px) and (hover: hover) and (any-pointer: fine) {
-  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h1,
-  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h2 {
-    opacity: 0;
-    transform: translate3d(0, 50px, 0);
-  }
-  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier p {
-    opacity: 0;
-    transform: translate3d(0, 20px, 0);
-  }
-  .home-section[aria-hidden="true"]:not(.scrolled) [data-shape] {
-    opacity: 0;
-  }
-  .home-section[aria-hidden="true"]:not(.scrolled) .work-illo {
-    opacity: 0;
-    transform: translate3d(0, 40px, 0);
-  }
-  .home-section[aria-hidden="true"]:not(.scrolled) .footer-main,
-  .home-section[aria-hidden="true"]:not(.scrolled) .footer-bottom {
-    opacity: 0;
-    transform: translate3d(0, 40px, 0);
-  }
+.home-section[aria-hidden="true"]:not(.scrolled) .cavalier p {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+.home-section[aria-hidden="true"]:not(.scrolled) [data-shape] {
+  opacity: 0;
+}
+.home-section[aria-hidden="true"]:not(.scrolled) .work-illo {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+}
+.home-section[aria-hidden="true"]:not(.scrolled) .footer-main,
+.home-section[aria-hidden="true"]:not(.scrolled) .footer-bottom {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
 }
 
 .cavalier h1,

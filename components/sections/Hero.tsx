@@ -7,7 +7,7 @@ export default function Hero() {
     <section
       data-section="une"
       aria-hidden="false"
-      className="home-section flex-col bg-primary lg:bg-[linear-gradient(90deg,_#044d35_67%,_#f0eee6_33%)] min-h-dvh"
+      className="home-section flex-col bg-[linear-gradient(90deg,_#044d35_70%,_#f0eee6_30%)] sm:bg-[linear-gradient(90deg,_#044d35_67%,_#f0eee6_33%)]"
     >
       {/* Primary: heading + avatar */}
       <div className="flex flex-1 w-full items-center justify-between px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40">
@@ -34,7 +34,7 @@ export default function Hero() {
           }
         />
 
-        <div className="hidden lg:block shrink-0 ml-8 xl:mr-16">
+        <div className="shrink-0 ml-6 sm:ml-8 xl:mr-16">
           <Visage />
         </div>
       </div>
@@ -53,10 +53,6 @@ export default function Hero() {
         </ul>
       </div>
 
-      {/* Mobile avatar */}
-      <div className="lg:hidden w-full flex items-center justify-center bg-bg py-16">
-        <Visage />
-      </div>
     </section>
   );
 }
