@@ -115,7 +115,7 @@ main {
 [data-current-section="deux"] #logo,
 [data-current-section="cinq"] #logo,
 [data-current-section="quatre"] #logo {
-  color: var(--primary) !important;
+  color: var(--accent) !important;
 }
 
 [data-current-section="trois"] #section-nav,

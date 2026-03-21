@@ -19,7 +19,7 @@ export default function Cavalier({
   children,
   className = "",
 }: CavalierProps) {
-  const hColor = theme === "light" ? "text-bg" : "text-primary";
+  const hColor = theme === "light" ? "text-bg" : "text-accent";
   const pColor = theme === "light" ? "text-bg/80" : "text-accent/80";
 
   return (

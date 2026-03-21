@@ -27,7 +27,7 @@ export default function Button({
       className={`relative z-[1] flex items-center justify-center py-4 px-8 w-full rounded-[3px] transition-all duration-500 ${
         isPrimary
           ? "bg-primary text-bg border border-primary group-hover:bg-primary/90"
-          : "bg-transparent text-primary border border-primary group-hover:text-bg"
+          : "bg-transparent text-accent border border-accent group-hover:text-bg"
       }`}
     >
       <span className="relative z-[1]">{children}</span>

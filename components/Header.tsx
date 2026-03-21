@@ -73,7 +73,7 @@ export default function Header() {
         id="logo"
         href="/"
         aria-label="Logo, go to homepage."
-        className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-primary"}`}
+        className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-accent"}`}
       >
         <span
           className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "-translate-x-4 opacity-80" : ""}`}
