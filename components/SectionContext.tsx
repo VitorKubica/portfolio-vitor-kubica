@@ -28,7 +28,7 @@ export function SectionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>("[data-section]");
     // On desktop the scroll container is <main>, on mobile it's the viewport
-    const scrollRoot = document.querySelector("main");
+    const scrollRoot = document.querySelector("main"); // always the scroll container
 
     const observer = new IntersectionObserver(
       (entries) => {
