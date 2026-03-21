@@ -10,14 +10,14 @@ export default function Contact() {
       id="contact"
       data-section="cinq"
       aria-hidden="true"
-      className="home-section bg-white py-20 lg:py-0"
+      className="home-section bg-bg py-20 lg:py-0"
     >
       <div className="w-full flex flex-col items-center px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto">
         <Cavalier
           heading="Send me a message!"
-          className="mb-12 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!font-bold [&_h2]:!max-w-none"
+          className="mb-12 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!font-normal [&_h2]:!max-w-none"
           textSlot={
-            <p className="mt-4 text-lg leading-snug text-deep-purple tracking-wide sm:text-center">
+            <p className="mt-4 text-lg sm:text-xl leading-relaxed text-accent/70 sm:text-center tracking-wide">
               Got a question or proposal, or just want
               <br className="hidden sm:block" /> to say hello? Go ahead.
             </p>
@@ -59,7 +59,7 @@ export default function Contact() {
             />
           </div>
 
-          <Button type="submit" className="self-start sm:self-center mt-4">
+          <Button type="submit" variant="primary" className="self-start sm:self-center mt-4">
             Shoot
           </Button>
         </form>

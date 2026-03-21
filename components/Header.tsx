@@ -60,10 +60,11 @@ export default function Header() {
     };
   }, []);
 
-  const logoIsBlue =
-    currentSection === "deux" ||
-    currentSection === "quatre" ||
-    currentSection === "cinq";
+  // Logo is light on dark sections (une, trois, footer), dark on light sections
+  const logoOnDark =
+    currentSection === "une" ||
+    currentSection === "trois" ||
+    currentSection === "footer";
 
   return (
     <header className="fixed top-0 left-0 w-full z-[1000] flex items-center justify-between px-6 sm:px-10 lg:px-16 py-6 lg:py-8 bg-transparent">
@@ -72,10 +73,10 @@ export default function Header() {
         id="logo"
         href="/"
         aria-label="Logo, go to homepage."
-        className={`relative z-[999] transition-colors duration-700 ${logoIsBlue ? "text-electric-blue" : "text-lime"}`}
+        className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-primary"}`}
       >
         <span
-          className={`block text-3xl sm:text-4xl font-black tracking-tight transition-transform duration-500 ${compact ? "-translate-x-4 opacity-80" : ""}`}
+          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "-translate-x-4 opacity-80" : ""}`}
         >
           VK
         </span>
@@ -88,7 +89,9 @@ export default function Header() {
         aria-controls="contact-menu"
         aria-expanded={menuOpen}
         onClick={toggleMenu}
-        className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer text-electric-blue transition-transform duration-200 ${menuOpen ? "x scale-90" : ""}`}
+        className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-200 ${
+          logoOnDark ? "text-bg" : "text-accent"
+        } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span
           className={`block h-[2px] bg-current transition-all duration-200 ${menuOpen ? "w-full rotate-45 translate-y-[0px]" : "w-full mb-3"}`}
@@ -104,11 +107,11 @@ export default function Header() {
         aria-label="Contact menu"
         className={`
           fixed inset-0 lg:absolute lg:inset-auto lg:top-4 lg:right-8 lg:w-80
-          z-[998] flex flex-col bg-white p-8 sm:p-10
+          z-[998] flex flex-col bg-bg p-8 sm:p-10
           transition-all duration-300
           ${menuOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none lg:scale-95"}
           max-lg:justify-center max-lg:text-xl
-          lg:shadow-xl lg:rounded-lg lg:origin-top-right
+          lg:shadow-xl lg:rounded-[3px] lg:origin-top-right
         `}
       >
         <ul
@@ -119,7 +122,7 @@ export default function Header() {
             <li key={item}>
               <a
                 href={`#${item.toLowerCase().replace(" ", "-")}`}
-                className="text-electric-blue hover:opacity-70 transition-opacity"
+                className="text-accent hover:text-link transition-colors"
                 onClick={closeMenu}
               >
                 {item}
@@ -130,14 +133,14 @@ export default function Header() {
 
         <div className="mt-8 lg:mt-6">
           <span
-            className={`block uppercase text-xs tracking-[0.25em] text-[#cbc9e2] mb-1 transition-opacity duration-200 ${menuOpen ? "opacity-100" : "lg:opacity-0"}`}
+            className={`block uppercase text-xs tracking-[0.25em] text-accent/40 mb-1 transition-opacity duration-200 ${menuOpen ? "opacity-100" : "lg:opacity-0"}`}
             style={{ transitionDelay: "250ms" }}
           >
             Say Hello
           </span>
           <a
             href="mailto:hello@vitorkubica.dev"
-            className={`text-electric-blue text-base hover:opacity-70 transition-all duration-300 ${menuOpen ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:translate-y-6"}`}
+            className={`text-link text-base hover:opacity-70 transition-all duration-300 ${menuOpen ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:translate-y-6"}`}
             style={{ transitionDelay: "300ms" }}
           >
             hello@vitorkubica.dev
@@ -160,7 +163,7 @@ export default function Header() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-electric-blue hover:opacity-70 transition-opacity"
+                className="text-accent hover:text-link transition-colors"
               >
                 {label}
               </a>

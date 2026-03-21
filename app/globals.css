@@ -1,19 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --electric-blue: #4831d4;
-  --lime: #ccf381;
-  --lime-alt: #badd76;
-  --deep-purple: #3d155f;
+  --primary: #044d35;
+  --accent: #141413;
+  --background: #f0eee6;
+  --text: #141413;
+  --link: #2e8b57;
 }
 
 @theme inline {
-  --color-electric-blue: #4831d4;
-  --color-lime: #ccf381;
-  --color-lime-alt: #badd76;
-  --color-deep-purple: #3d155f;
+  --color-primary: #044d35;
+  --color-accent: #141413;
+  --color-bg: #f0eee6;
+  --color-link: #2e8b57;
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
 }
 
 html {
@@ -23,18 +24,19 @@ html {
 body {
   margin: 0;
   padding: 0;
-  color: var(--deep-purple);
-  font-family: var(--font-sans), "Helvetica Neue", "Segoe UI", "Oxygen",
-    "Ubuntu", "Cantarell", "Open Sans", sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font-sans), Georgia, "Times New Roman", serif;
+  font-size: 16px;
   overscroll-behavior: none;
 }
 
 ::selection {
-  background-color: var(--lime);
-  color: var(--deep-purple);
+  background-color: var(--primary);
+  color: var(--background);
 }
 
-/* ── Scroll snap (desktop only: ≥1024px) ── */
+/* ── Scroll snap (desktop ≥1024px) ── */
 @media (min-width: 1024px) {
   html {
     overflow: hidden;
@@ -67,7 +69,7 @@ main {
   }
 }
 
-/* ── Cavalier animation (desktop only) ── */
+/* ── Cavalier entrance animation (desktop) ── */
 @media (min-width: 1024px) and (hover: hover) and (any-pointer: fine) {
   .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h1,
   .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h2 {
@@ -113,14 +115,14 @@ main {
 [data-current-section="deux"] #logo,
 [data-current-section="cinq"] #logo,
 [data-current-section="quatre"] #logo {
-  color: var(--electric-blue) !important;
+  color: var(--primary) !important;
 }
 
 [data-current-section="trois"] #section-nav,
 [data-current-section="trois"] .menu-toggle:not(.x),
 [data-current-section="footer"] #section-nav,
 [data-current-section="footer"] .menu-toggle:not(.x) {
-  color: var(--lime) !important;
+  color: var(--background) !important;
 }
 
 [data-current-section="footer"] #section-nav {
@@ -129,4 +131,20 @@ main {
 
 body.no-scroll {
   overflow: hidden;
+}
+
+/* ── Typography ── */
+h1, h2, h3 {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+
+/* ── Links ── */
+a {
+  text-decoration: none;
+}
+
+/* ── Blockquotes / long text use Georgia ── */
+blockquote,
+.prose-long {
+  font-family: Georgia, "Times New Roman", serif;
 }

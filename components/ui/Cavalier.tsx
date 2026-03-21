@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 type CavalierProps = {
   heading?: string;
   text?: string;
-  theme?: "electric" | "lime";
+  theme?: "default" | "light";
   headingSlot?: ReactNode;
   textSlot?: ReactNode;
   children?: ReactNode;
@@ -13,14 +13,14 @@ type CavalierProps = {
 export default function Cavalier({
   heading,
   text,
-  theme = "electric",
+  theme = "default",
   headingSlot,
   textSlot,
   children,
   className = "",
 }: CavalierProps) {
-  const hColor = theme === "lime" ? "text-lime" : "text-electric-blue";
-  const pColor = theme === "lime" ? "text-white" : "text-deep-purple";
+  const hColor = theme === "light" ? "text-bg" : "text-primary";
+  const pColor = theme === "light" ? "text-bg/80" : "text-accent/80";
 
   return (
     <article
@@ -31,14 +31,14 @@ export default function Cavalier({
         {headingSlot ??
           (heading && (
             <h2
-              className={`m-0 text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight ${hColor}`}
+              className={`m-0 font-serif text-4xl sm:text-5xl lg:text-[96px] font-normal italic leading-[1.05] tracking-tight ${hColor}`}
               dangerouslySetInnerHTML={{ __html: heading }}
             />
           ))}
         {textSlot ??
           (text && (
             <p
-              className={`mt-4 text-base sm:text-lg leading-relaxed max-w-xl ${pColor}`}
+              className={`mt-6 text-lg sm:text-xl lg:text-2xl leading-relaxed max-w-xl ${pColor}`}
               dangerouslySetInnerHTML={{ __html: text }}
             />
           ))}

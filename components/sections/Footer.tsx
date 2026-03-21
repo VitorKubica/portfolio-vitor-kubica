@@ -9,18 +9,18 @@ export default function Footer() {
     <footer
       data-section="footer"
       aria-hidden="true"
-      className="home-section text-lime-alt bg-deep-purple"
+      className="home-section text-bg/80 bg-accent"
     >
       <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 py-16 lg:py-20 max-w-6xl mx-auto">
         {/* Footer main */}
         <div className="footer-main w-full flex flex-col sm:flex-row gap-10 sm:gap-20 mb-14">
           <div>
-            <span className="block uppercase text-xs tracking-[0.25em] text-[#cbc9e2] mb-2">
+            <span className="block uppercase text-xs tracking-[0.25em] text-bg/40 mb-2">
               Say Hello
             </span>
             <ul className="list-none p-0 m-0 text-base sm:text-lg leading-relaxed">
               <li>
-                <a href="mailto:hello@vitorkubica.dev" className="text-current hover:opacity-70 transition-opacity">
+                <a href="mailto:hello@vitorkubica.dev" className="text-bg/80 hover:text-bg transition-colors">
                   hello@vitorkubica.dev
                 </a>
               </li>
@@ -29,12 +29,12 @@ export default function Footer() {
 
           <ul className="list-none p-0 m-0 text-base sm:text-lg leading-relaxed space-y-1">
             <li>
-              <a href="#work" className="text-current hover:opacity-70 transition-opacity">
+              <a href="#work" className="text-bg/80 hover:text-bg transition-colors">
                 My Work
               </a>
             </li>
             <li>
-              <a href="#articles" className="text-current hover:opacity-70 transition-opacity">
+              <a href="#articles" className="text-bg/80 hover:text-bg transition-colors">
                 My Shelf
               </a>
             </li>
@@ -42,8 +42,8 @@ export default function Footer() {
         </div>
 
         {/* Footer bottom */}
-        <div className="footer-bottom w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-8 text-sm sm:text-base border-t border-lime-alt/50">
-          <span>&copy; Vitor Kubica {new Date().getFullYear()}</span>
+        <div className="footer-bottom w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-8 text-sm sm:text-base border-t border-bg/15">
+          <span className="text-bg/50">&copy; Vitor Kubica {new Date().getFullYear()}</span>
 
           <ul className="list-none p-0 m-0 flex gap-6">
             {SOCIAL_LINKS.map((link) => (
@@ -53,7 +53,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.ariaLabel}
-                  className="text-current hover:opacity-70 transition-opacity"
+                  className="text-bg/60 hover:text-bg transition-colors"
                 >
                   {link.label}
                 </a>
