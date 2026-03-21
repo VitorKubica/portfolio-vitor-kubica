@@ -10,36 +10,36 @@ export default function Experience() {
     <section
       data-section="trois"
       aria-hidden="true"
-      className="home-section bg-electric-blue py-20 lg:py-0"
+      className="home-section bg-primary py-20 lg:py-0"
     >
       <div className="w-full flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12 lg:gap-16 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto">
         <Cavalier
-          theme="lime"
+          theme="light"
           heading={`Over the <br/> past ${years} years,`}
           className="max-w-xl"
           textSlot={
             <div className="mt-6 space-y-4">
-              <p className="text-base sm:text-lg leading-relaxed text-white/90">
+              <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed text-bg/80">
                 I&apos;ve built products for companies and businesses around the
                 globe ranging from marketing websites to complex solutions and
                 enterprise apps with focus on fast, elegant and accessible user
                 experiences.
               </p>
-              <p className="text-base sm:text-lg leading-relaxed text-white/90">
+              <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed text-bg/80">
                 Currently, I work as a Frontend Developer crafting thoughtful and
                 inclusive experiences that adhere to web standards.
               </p>
-              <p className="text-base sm:text-lg leading-relaxed text-white/90">
+              <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed text-bg/80">
                 I&apos;m passionate about building scalable frontend
                 architectures, component libraries, and design systems that
                 empower teams to deliver consistent, high-quality products.
               </p>
-              <p className="text-base sm:text-lg leading-relaxed text-white/90">
+              <p className="text-lg sm:text-xl lg:text-2xl leading-relaxed text-bg/80">
                 I&apos;m available for new opportunities. Want us to work
                 together? You should{" "}
                 <a
                   href="mailto:hello@vitorkubica.dev"
-                  className="text-[aqua] border-b-2 border-dotted border-[aqua] hover:opacity-80 transition-opacity"
+                  className="text-bg border-b border-dotted border-bg/60 hover:opacity-80 transition-opacity"
                 >
                   contact me
                 </a>

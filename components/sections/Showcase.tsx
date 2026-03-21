@@ -6,12 +6,12 @@ export default function Showcase() {
     <section
       data-section="quatre"
       aria-hidden="true"
-      className="home-section bg-white py-20 lg:py-0"
+      className="home-section bg-bg py-20 lg:py-0"
     >
       <div className="w-full px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row w-full">
           {/* Lane 1 */}
-          <div className="flex-1 p-8 sm:p-10 lg:p-16 border-b sm:border-b-0 sm:border-r border-electric-blue/20">
+          <div className="flex-1 p-8 sm:p-10 lg:p-16 border-b sm:border-b-0 sm:border-r border-primary/15">
             <Cavalier
               heading="I build &amp; <br/> design stuff"
               text="Open source <br/> projects, web apps <br/> and experimentals."

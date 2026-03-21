@@ -18,7 +18,6 @@ export default function SectionNav() {
       `[data-section='${sectionId}']`
     ) as HTMLElement | null;
     if (!el) return;
-    // On desktop the scroll container is <main>
     const main = document.querySelector("main");
     if (main && window.innerWidth >= 1024) {
       main.scrollTo({ top: el.offsetTop, behavior: "smooth" });
@@ -33,7 +32,7 @@ export default function SectionNav() {
     <nav
       id="section-nav"
       aria-label="Section navigation"
-      className="fixed z-[999] right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex text-electric-blue"
+      className="fixed z-[999] right-6 lg:right-12 top-1/2 -translate-y-1/2 hidden lg:flex text-accent"
     >
       <ul className="flex flex-col gap-1 list-none p-0 m-0">
         {SECTIONS.map((s) => (
@@ -45,7 +44,7 @@ export default function SectionNav() {
               className="w-7 h-7 flex items-center justify-center cursor-pointer bg-transparent outline-none"
             >
               <span
-                className={`block w-2 h-2 border border-current transition-all duration-200 ${
+                className={`block w-2 h-2 border border-current transition-all duration-200 rounded-[1px] ${
                   currentSection === s.id
                     ? "rotate-0 scale-150 bg-transparent"
                     : "rotate-45 bg-current"

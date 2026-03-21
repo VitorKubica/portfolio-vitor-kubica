@@ -7,24 +7,15 @@ export default function SquareOfDots({ className }: { className?: string }) {
           key={`${row}-${col}`}
           cx={col * 14 + 7}
           cy={row * 14 + 7}
-          r="2.5"
+          r="2"
           fill="currentColor"
-          opacity="0.3"
+          opacity="0.15"
         />
       );
     }
   }
-
   return (
-    <svg
-      className={className}
-      width="112"
-      height="126"
-      viewBox="0 0 112 126"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      data-shape
-    >
+    <svg className={className} width="112" height="126" viewBox="0 0 112 126" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" data-shape>
       {dots}
     </svg>
   );

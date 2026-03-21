@@ -5,7 +5,7 @@ type ButtonProps = {
   children: ReactNode;
   href?: string;
   type?: "button" | "submit";
-  lime?: boolean;
+  variant?: "primary" | "secondary";
   noArrow?: boolean;
   className?: string;
 };
@@ -14,29 +14,30 @@ export default function Button({
   children,
   href,
   type = "button",
-  lime = false,
+  variant = "secondary",
   noArrow = false,
   className = "",
 }: ButtonProps) {
-  const base = `sauce-button group relative font-bold uppercase tracking-widest text-sm select-none inline-flex overflow-hidden bg-transparent whitespace-nowrap ${className}`;
+  const isPrimary = variant === "primary";
+
+  const base = `group relative font-medium uppercase tracking-widest text-sm select-none inline-flex overflow-hidden bg-transparent whitespace-nowrap rounded-[3px] ${className}`;
 
   const inner = (
     <div
-      className={`relative z-[1] flex items-center justify-center py-4 px-8 w-full border border-current transition-colors duration-500 ${
-        lime
-          ? "text-lime group-hover:text-deep-purple group-hover:border-lime"
-          : "text-electric-blue group-hover:text-white group-hover:border-electric-blue"
+      className={`relative z-[1] flex items-center justify-center py-4 px-8 w-full rounded-[3px] transition-all duration-500 ${
+        isPrimary
+          ? "bg-primary text-bg border border-primary group-hover:bg-primary/90"
+          : "bg-transparent text-accent border border-accent group-hover:text-bg"
       }`}
     >
       <span className="relative z-[1]">{children}</span>
       {!noArrow && (
         <BowArrow className="relative z-[1] w-12 h-5 ml-4" />
       )}
-      <span
-        className={`absolute inset-0 z-0 -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${
-          lime ? "bg-lime" : "bg-electric-blue"
-        }`}
-      />
+      {/* Slide-in bg for secondary */}
+      {!isPrimary && (
+        <span className="absolute inset-0 z-0 bg-primary -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] rounded-[3px]" />
+      )}
     </div>
   );
 
