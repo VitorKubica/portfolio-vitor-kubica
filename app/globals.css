@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+:root {
+  --electric-blue: #4831d4;
+  --lime: #ccf381;
+  --lime-alt: #badd76;
+  --deep-purple: #3d155f;
+}
+
+@theme inline {
+  --color-electric-blue: #4831d4;
+  --color-lime: #ccf381;
+  --color-lime-alt: #badd76;
+  --color-deep-purple: #3d155f;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--deep-purple);
+  font-family: var(--font-sans), "Helvetica Neue", "Segoe UI", "Oxygen",
+    "Ubuntu", "Cantarell", "Open Sans", sans-serif;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background-color: var(--lime);
+  color: var(--deep-purple);
+}
+
+/* ── Scroll snap (desktop only: ≥1024px) ── */
+@media (min-width: 1024px) {
+  html {
+    overflow: hidden;
+  }
+  main {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+    height: 100dvh;
+  }
+}
+
+main {
+  outline: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Section base ── */
+.home-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .home-section {
+    min-height: 100dvh;
+    scroll-snap-align: start;
+  }
+}
+
+/* ── Cavalier animation (desktop only) ── */
+@media (min-width: 1024px) and (hover: hover) and (any-pointer: fine) {
+  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h1,
+  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier h2 {
+    opacity: 0;
+    transform: translate3d(0, 50px, 0);
+  }
+  .home-section[aria-hidden="true"]:not(.scrolled) .cavalier p {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  .home-section[aria-hidden="true"]:not(.scrolled) [data-shape] {
+    opacity: 0;
+  }
+  .home-section[aria-hidden="true"]:not(.scrolled) .work-illo {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  .home-section[aria-hidden="true"]:not(.scrolled) .footer-main,
+  .home-section[aria-hidden="true"]:not(.scrolled) .footer-bottom {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+}
+
+.cavalier h1,
+.cavalier h2,
+.cavalier p {
+  transition: transform 0.5s, opacity 0.2s;
+}
+
+.work-illo {
+  transition: transform 0.5s 400ms, opacity 0.2s 400ms;
+}
+
+.footer-main {
+  transition: transform 0.5s 300ms, opacity 0.2s 300ms;
+}
+.footer-bottom {
+  transition: transform 0.5s 500ms, opacity 0.2s 500ms;
+}
+
+/* ── Section-aware header/nav colors ── */
+[data-current-section="deux"] #logo,
+[data-current-section="cinq"] #logo,
+[data-current-section="quatre"] #logo {
+  color: var(--electric-blue) !important;
+}
+
+[data-current-section="trois"] #section-nav,
+[data-current-section="trois"] .menu-toggle:not(.x),
+[data-current-section="footer"] #section-nav,
+[data-current-section="footer"] .menu-toggle:not(.x) {
+  color: var(--lime) !important;
+}
+
+[data-current-section="footer"] #section-nav {
+  display: none;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}

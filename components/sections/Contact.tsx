@@ -1,0 +1,69 @@
+"use client";
+
+import Cavalier from "../ui/Cavalier";
+import Button from "../ui/Button";
+import InputGroup from "../ui/InputGroup";
+
+export default function Contact() {
+  return (
+    <section
+      id="contact"
+      data-section="cinq"
+      aria-hidden="true"
+      className="home-section bg-white py-20 lg:py-0"
+    >
+      <div className="w-full flex flex-col items-center px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto">
+        <Cavalier
+          heading="Send me a message!"
+          className="mb-12 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!font-bold [&_h2]:!max-w-none"
+          textSlot={
+            <p className="mt-4 text-lg leading-snug text-deep-purple tracking-wide sm:text-center">
+              Got a question or proposal, or just want
+              <br className="hidden sm:block" /> to say hello? Go ahead.
+            </p>
+          }
+        />
+
+        <form
+          action="https://formspree.io/f/yourformid"
+          method="POST"
+          className="flex flex-col w-full max-w-lg"
+        >
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-5 mb-8">
+            <InputGroup
+              id="full-name"
+              name="name"
+              label="Your Name"
+              placeholder="Enter your name"
+              required
+            />
+            <InputGroup
+              id="email"
+              name="_replyto"
+              type="email"
+              label="Email Address"
+              placeholder="Enter your email address"
+              required
+            />
+          </div>
+
+          <div className="mb-8">
+            <InputGroup
+              id="message"
+              name="message"
+              label="Your Message"
+              textarea
+              required
+              minLength={30}
+              placeholder="Hi, I think we need a design system for our products at Company X. How soon can you hop on to discuss this?"
+            />
+          </div>
+
+          <Button type="submit" className="self-start sm:self-center mt-4">
+            Shoot
+          </Button>
+        </form>
+      </div>
+    </section>
+  );
+}
