@@ -100,13 +100,7 @@ main {
 
 /* ── Section nav visibility ── */
 #section-nav {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  #section-nav {
-    display: flex;
-  }
+  display: flex;
 }
 
 /* ── Section-aware header/nav colors ── */
