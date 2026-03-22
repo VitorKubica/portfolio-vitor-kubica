@@ -90,7 +90,7 @@ export default function Header() {
         aria-expanded={menuOpen}
         onClick={toggleMenu}
         className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-200 ${
-          logoOnDark ? "text-bg" : "text-accent"
+          menuOpen ? "text-accent" : logoOnDark ? "text-bg" : "text-accent"
         } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span
