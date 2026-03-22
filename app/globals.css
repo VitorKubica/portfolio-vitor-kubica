@@ -43,6 +43,7 @@ main {
   height: 100dvh;
   outline: none;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-top: 80px;
 }
 
 /* ── Section base ── */
@@ -95,6 +96,17 @@ main {
 }
 .footer-bottom {
   transition: transform 0.5s 500ms, opacity 0.2s 500ms;
+}
+
+/* ── Section nav visibility ── */
+#section-nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  #section-nav {
+    display: flex;
+  }
 }
 
 /* ── Section-aware header/nav colors ── */

@@ -76,7 +76,7 @@ export default function Header() {
         className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-accent"}`}
       >
         <span
-          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "-translate-x-4 opacity-80" : ""}`}
+          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
         >
           VK
         </span>
