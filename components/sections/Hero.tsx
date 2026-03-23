@@ -21,7 +21,7 @@ export default function Hero() {
           text="I like to craft solid and scalable frontend products with great user experiences."
           headingSlot={
             <h1
-              className="m-0 font-serif text-[48px] sm:text-[64px] lg:text-[96px] font-normal italic leading-[1.05] text-bg tracking-tight"
+              className="m-0 font-sans text-[48px] sm:text-[64px] lg:text-[96px] font-extrabold leading-[1.05] text-bg tracking-tight"
               aria-label="Frontend Developer"
             >
               <span aria-hidden="true">

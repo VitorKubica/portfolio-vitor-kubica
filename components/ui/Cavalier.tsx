@@ -31,7 +31,7 @@ export default function Cavalier({
         {headingSlot ??
           (heading && (
             <h2
-              className={`m-0 font-serif text-4xl sm:text-5xl lg:text-[96px] font-normal italic leading-[1.05] tracking-tight ${hColor}`}
+              className={`m-0 font-sans text-4xl sm:text-5xl lg:text-[96px] font-extrabold leading-[1.05] tracking-tight ${hColor}`}
               dangerouslySetInnerHTML={{ __html: heading }}
             />
           ))}

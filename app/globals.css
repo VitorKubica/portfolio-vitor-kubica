@@ -126,7 +126,7 @@ body.no-scroll {
 
 /* ── Typography ── */
 h1, h2, h3 {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 /* ── Links ── */
