@@ -32,7 +32,7 @@ export default function SectionNav() {
     <nav
       id="section-nav"
       aria-label="Section navigation"
-      className="fixed z-[999] right-6 lg:right-12 top-1/2 -translate-y-1/2 text-accent"
+      className="fixed z-[999] right-6 lg:right-12 bottom-6 lg:bottom-8 text-accent"
     >
       <ul className="flex flex-col gap-1 list-none p-0 m-0">
         {SECTIONS.map((s) => (
