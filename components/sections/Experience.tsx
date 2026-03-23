@@ -49,7 +49,7 @@ export default function Experience() {
           }
         />
 
-        <figure className="work-illo flex shrink-0 w-full lg:w-auto max-w-sm lg:max-w-md mx-auto lg:mx-0">
+        <figure className="work-illo flex shrink-0 w-full lg:w-auto max-w-sm lg:max-w-md mx-auto lg:mx-0 max-lg:hidden">
           <WorkIllo className="w-full h-auto" />
           <figcaption className="sr-only">
             Illustration of a developer workspace.

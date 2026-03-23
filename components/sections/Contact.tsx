@@ -15,7 +15,7 @@ export default function Contact() {
       <div className="w-full flex flex-col items-center px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto">
         <Cavalier
           heading="Send me a message!"
-          className="mb-12 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!font-normal [&_h2]:!max-w-none"
+          className="mb-12 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!max-w-none"
           textSlot={
             <p className="mt-4 text-lg sm:text-xl leading-relaxed text-accent/70 sm:text-center tracking-wide">
               Got a question or proposal, or just want

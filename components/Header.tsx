@@ -76,7 +76,7 @@ export default function Header() {
         className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-accent"}`}
       >
         <span
-          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "-translate-x-4 opacity-80" : ""}`}
+          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
         >
           VK
         </span>
@@ -90,7 +90,7 @@ export default function Header() {
         aria-expanded={menuOpen}
         onClick={toggleMenu}
         className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-200 ${
-          logoOnDark ? "text-bg" : "text-accent"
+          menuOpen ? "text-accent" : logoOnDark ? "text-bg" : "text-accent"
         } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span

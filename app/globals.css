@@ -97,6 +97,11 @@ main {
   transition: transform 0.5s 500ms, opacity 0.2s 500ms;
 }
 
+/* ── Section nav visibility ── */
+#section-nav {
+  display: flex;
+}
+
 /* ── Section-aware header/nav colors ── */
 [data-current-section="deux"] #logo,
 [data-current-section="cinq"] #logo,
@@ -121,7 +126,7 @@ body.no-scroll {
 
 /* ── Typography ── */
 h1, h2, h3 {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 /* ── Links ── */
