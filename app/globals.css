@@ -104,8 +104,9 @@ main {
 
 /* ── Section-aware header/nav colors ── */
 [data-current-section="deux"] #logo,
+[data-current-section="quatre"] #logo,
 [data-current-section="cinq"] #logo,
-[data-current-section="quatre"] #logo {
+[data-current-section="six"] #logo {
   color: var(--accent) !important;
 }
 

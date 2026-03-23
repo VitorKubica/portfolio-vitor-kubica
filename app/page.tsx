@@ -1,7 +1,8 @@
 import Hero from "@/components/sections/Hero";
-import Skills from "@/components/sections/Skills";
+import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
-import Showcase from "@/components/sections/Showcase";
+import About from "@/components/sections/About";
+import Education from "@/components/sections/Education";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 
@@ -9,9 +10,10 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Skills />
+      <Projects />
       <Experience />
-      <Showcase />
+      <About />
+      <Education />
       <Contact />
       <Footer />
     </main>
