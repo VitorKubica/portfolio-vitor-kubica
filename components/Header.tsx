@@ -12,6 +12,7 @@ const SOCIAL_LINKS = {
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [logoVisible, setLogoVisible] = useState(false);
   const { currentSection } = useSectionContext();
 
   const closeMenu = useCallback(() => {
@@ -47,6 +48,11 @@ export default function Header() {
   }, [menuOpen, closeMenu]);
 
   useEffect(() => {
+    const t = requestAnimationFrame(() => setLogoVisible(true));
+    return () => cancelAnimationFrame(t);
+  }, []);
+
+  useEffect(() => {
     function onScroll() {
       const main = document.querySelector("main");
       setCompact((main?.scrollTop ?? window.scrollY) > 200);
@@ -73,12 +79,15 @@ export default function Header() {
         id="logo"
         href="/"
         aria-label="Logo, go to homepage."
-        className={`relative z-[999] transition-colors duration-700 ${logoOnDark ? "text-bg" : "text-accent"}`}
+        className={`relative z-[999] flex flex-col transition-all duration-500 ${logoOnDark ? "text-bg" : "text-accent"} ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
       >
         <span
-          className={`block font-serif text-3xl sm:text-4xl font-normal italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
+          className={`block font-serif text-3xl sm:text-4xl font-bold italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
         >
           VK
+        </span>
+        <span className="hidden lg:block uppercase tracking-widest text-[10px] font-sans not-italic mt-0.5 opacity-70">
+          Vitor K. Silveira
         </span>
       </a>
 
@@ -89,15 +98,15 @@ export default function Header() {
         aria-controls="contact-menu"
         aria-expanded={menuOpen}
         onClick={toggleMenu}
-        className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-200 ${
+        className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-300 ${
           menuOpen ? "text-accent" : logoOnDark ? "text-bg" : "text-accent"
         } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span
-          className={`block h-[2px] bg-current transition-all duration-200 ${menuOpen ? "w-full rotate-45 translate-y-[0px]" : "w-full mb-3"}`}
+          className={`block h-[2px] bg-current transition-all duration-300 ${menuOpen ? "w-full rotate-45 translate-y-[0px]" : "w-full mb-3"}`}
         />
         <span
-          className={`block h-[2px] bg-current transition-all duration-200 ${menuOpen ? "w-full -rotate-45 -translate-y-[2px]" : "w-[72%]"}`}
+          className={`block h-[2px] bg-current transition-all duration-300 ${menuOpen ? "w-full -rotate-45 -translate-y-[2px]" : "w-[72%]"}`}
         />
       </button>
 
