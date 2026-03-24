@@ -8,7 +8,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      data-section="cinq"
+      data-section="six"
       aria-hidden="true"
       className="home-section bg-bg py-20 lg:py-0"
     >
