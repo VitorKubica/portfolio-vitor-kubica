@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ProjectsBackground from "./ProjectsBackground";
 
 type Project = {
   id: string;
@@ -185,6 +186,7 @@ export default function Projects() {
 
   return (
     <section data-section="deux" aria-hidden="true" className="home-section bg-bg">
+      <ProjectsBackground />
 
       {/* ════════════════════════════════════════
           MOBILE layout (hidden on sm+)
