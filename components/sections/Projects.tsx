@@ -170,7 +170,7 @@ function ExpandedCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="col-span-2 sm:col-span-2 lg:col-span-3 bg-white border-2 border-primary rounded-[4px] p-6 sm:p-8 relative"
+      className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white border-2 border-primary rounded-[4px] p-6 sm:p-8 relative"
     >
       {/* Close button */}
       <button
@@ -237,7 +237,7 @@ export default function Projects() {
       aria-hidden="true"
       className="home-section bg-bg py-20 lg:py-0"
     >
-      <div className="w-full h-full flex flex-col justify-center px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-20">
+      <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-14 sm:py-16 lg:py-20 lg:justify-center">
         {/* Section heading */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -250,7 +250,7 @@ export default function Projects() {
         </motion.h2>
 
         {/* Cards grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           <AnimatePresence mode="popLayout">
             {expanded ? (
               <>

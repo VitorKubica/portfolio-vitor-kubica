@@ -100,9 +100,9 @@ export default function Education() {
     <section
       data-section="cinq"
       aria-hidden="true"
-      className="home-section bg-bg py-20 lg:py-0"
+      className="home-section bg-bg py-24 sm:py-20 lg:py-0"
     >
-      <div className="w-full h-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-12 lg:py-16 overflow-y-auto">
+      <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-8 lg:py-16">
 
         {/* ── Academic Background ── */}
         <motion.div

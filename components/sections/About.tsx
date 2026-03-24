@@ -45,7 +45,7 @@ export default function About() {
     <section
       data-section="quatre"
       aria-hidden="true"
-      className="home-section bg-bg py-20 lg:py-0"
+      className="home-section bg-bg py-24 sm:py-20 lg:py-0"
     >
       <div className="w-full px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
@@ -59,7 +59,7 @@ export default function About() {
           >
             {/* Big heading */}
             <div>
-              <h2 className="font-sans font-extrabold text-[56px] sm:text-[72px] lg:text-[80px] leading-[1] tracking-tight text-accent m-0">
+              <h2 className="font-sans font-extrabold text-[40px] sm:text-[56px] lg:text-[80px] leading-[1] tracking-tight text-accent m-0">
                 About
               </h2>
               {/* Name with green underline decoration */}

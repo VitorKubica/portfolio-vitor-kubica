@@ -59,9 +59,9 @@ export default function Experience() {
     <section
       data-section="trois"
       aria-hidden="true"
-      className="home-section bg-primary py-20 lg:py-0 overflow-y-auto"
+      className="home-section bg-primary"
     >
-      <div className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-16 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto py-20 lg:py-0">
+      <div className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-16 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto py-24 sm:py-20 lg:py-0">
 
         {/* Left: Section heading */}
         <motion.div
