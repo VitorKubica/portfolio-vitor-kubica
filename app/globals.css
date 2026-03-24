@@ -38,6 +38,7 @@ body {
 }
 
 main {
+  scroll-snap-type: y mandatory;
   overflow-y: auto;
   height: 100dvh;
   outline: none;
@@ -46,28 +47,15 @@ main {
 }
 
 /* ── Section base ── */
-/* Mobile: natural height, sections can grow beyond viewport */
 .home-section {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 100svh;
+  height: 100dvh;
   overflow: hidden;
-}
-
-/* Desktop: strict full-height snap scroll */
-@media (min-width: 1024px) {
-  main {
-    scroll-snap-type: y mandatory;
-  }
-
-  .home-section {
-    height: 100dvh;
-    min-height: unset;
-    scroll-snap-align: start;
-  }
+  scroll-snap-align: start;
 }
 
 /* ── Cavalier entrance animation ── */

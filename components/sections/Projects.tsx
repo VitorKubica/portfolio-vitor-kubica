@@ -235,9 +235,11 @@ export default function Projects() {
     <section
       data-section="deux"
       aria-hidden="true"
-      className="home-section bg-bg py-20 lg:py-0"
+      className="home-section bg-bg"
     >
-      <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-14 sm:py-16 lg:py-20 lg:justify-center">
+      {/* Scrollable wrapper — fits within 100dvh, scrolls internally on mobile */}
+      <div className="w-full h-full overflow-y-auto flex flex-col lg:justify-center">
+      <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-24 lg:py-20">
         {/* Section heading */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -280,6 +282,7 @@ export default function Projects() {
             )}
           </AnimatePresence>
         </div>
+      </div>
       </div>
     </section>
   );

@@ -45,9 +45,10 @@ export default function About() {
     <section
       data-section="quatre"
       aria-hidden="true"
-      className="home-section bg-bg py-24 sm:py-20 lg:py-0"
+      className="home-section bg-bg"
     >
-      <div className="w-full px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto">
+      <div className="w-full h-full overflow-y-auto flex flex-col lg:justify-center">
+      <div className="w-full px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-24 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left column: heading + personal details */}
           <motion.div
@@ -130,6 +131,7 @@ export default function About() {
             </div>
           </motion.div>
         </div>
+      </div>
       </div>
     </section>
   );

@@ -10,9 +10,10 @@ export default function Contact() {
       id="contact"
       data-section="six"
       aria-hidden="true"
-      className="home-section bg-bg py-24 sm:py-20 lg:py-0"
+      className="home-section bg-bg"
     >
-      <div className="w-full flex flex-col items-center px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto">
+      <div className="w-full h-full overflow-y-auto flex flex-col justify-center">
+      <div className="w-full flex flex-col items-center px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto py-24 lg:py-20">
         <Cavalier
           heading="Send me a message!"
           className="mb-6 sm:mb-10 sm:text-center [&_h2]:!text-3xl [&_h2]:sm:!text-4xl [&_h2]:lg:!text-5xl [&_h2]:!max-w-none"
@@ -63,6 +64,7 @@ export default function Contact() {
             Shoot
           </Button>
         </form>
+      </div>
       </div>
     </section>
   );
