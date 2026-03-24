@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Instrument_Serif } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SectionProvider } from "@/components/SectionContext";
 import Header from "@/components/Header";
 import SectionNav from "@/components/SectionNav";
 
-const geistSans = Geist({
+const geistSans = localFont({
+  src: [
+    { path: "./fonts/geist-latin.woff2", weight: "100 900", style: "normal" },
+    { path: "./fonts/geist-latin-ext.woff2", weight: "100 900", style: "normal" },
+  ],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${instrumentSerif.variable} antialiased`}
+      className={`${geistSans.variable} antialiased`}
     >
       <body className="min-h-dvh bg-bg text-accent">
         <SectionProvider>

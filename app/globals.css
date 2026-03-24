@@ -14,7 +14,7 @@
   --color-bg: #f0eee6;
   --color-link: #2e8b57;
   --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-instrument-serif);
+  --font-serif: "Georgia", "Times New Roman", serif;
 }
 
 html {
