@@ -142,7 +142,7 @@ export default function ProjectsBackground() {
         ([a, b]) =>
           [[a[0] * sR, a[1] * sR, a[2] * sR], [b[0] * sR, b[1] * sR, b[2] * sR]] as [V3, V3]
       );
-      drawShape(ctx, sEdges, rxS, ryS, fov, w * 0.78, h * 0.36, "rgba(20,20,19,0.10)", 0.8);
+      drawShape(ctx, sEdges, rxS, ryS, fov, w * 0.78, h * 0.18, "rgba(20,20,19,0.10)", 0.8);
 
       // ── Octahedron (bottom-left) ──────────────────────────
       const oR = baseR * 0.52;

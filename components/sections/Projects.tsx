@@ -265,7 +265,7 @@ export default function Projects() {
       </AnimatePresence>
 
       {/* Mobile section body: heading + 2×3 grid */}
-      <div className="sm:hidden w-full h-full flex flex-col px-4 pt-20 pb-5">
+      <div className="sm:hidden relative z-10 w-full h-full flex flex-col px-4 pt-20 pb-5">
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -310,7 +310,7 @@ export default function Projects() {
           DESKTOP layout (hidden on mobile)
           Inline expansion within grid
       ════════════════════════════════════════ */}
-      <div className="hidden sm:flex w-full h-full overflow-y-auto flex-col lg:justify-center">
+      <div className="hidden sm:flex relative z-10 w-full h-full overflow-y-auto flex-col lg:justify-center">
         <div className="w-full flex flex-col px-10 lg:px-16 max-w-6xl mx-auto py-20">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
