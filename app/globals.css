@@ -106,13 +106,20 @@ main {
 /* ── Section-aware header/nav colors ── */
 [data-current-section="deux"] #logo,
 [data-current-section="quatre"] #logo,
-[data-current-section="cinq"] #logo,
 [data-current-section="six"] #logo {
   color: var(--accent) !important;
 }
 
+/* dark-bg sections → header elements use light (bg) color */
+[data-current-section="trois"] #logo,
+[data-current-section="cinq"] #logo {
+  color: var(--background) !important;
+}
+
 [data-current-section="trois"] #section-nav,
 [data-current-section="trois"] .menu-toggle:not(.x),
+[data-current-section="cinq"] #section-nav,
+[data-current-section="cinq"] .menu-toggle:not(.x),
 [data-current-section="footer"] #section-nav,
 [data-current-section="footer"] .menu-toggle:not(.x) {
   color: var(--background) !important;
