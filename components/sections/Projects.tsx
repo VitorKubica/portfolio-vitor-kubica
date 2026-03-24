@@ -85,26 +85,14 @@ const PROJECTS: Project[] = [
 
 function GithubIcon({ className }: { className?: string }) {
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
     </svg>
   );
 }
 
-function CollapsedCard({
-  project,
-  index,
-  onClick,
-}: {
-  project: Project;
-  index: number;
-  onClick: () => void;
-}) {
+/* ─── Desktop: collapsed card (inline grid) ─── */
+function CollapsedCard({ project, index, onClick }: { project: Project; index: number; onClick: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -114,40 +102,26 @@ function CollapsedCard({
       onClick={onClick}
       className="group bg-white border border-accent/15 rounded-[4px] p-5 sm:p-6 cursor-pointer flex flex-col gap-3 hover:border-primary/50 hover:shadow-sm transition-all duration-200"
     >
-      {/* Category badge */}
       <span className="self-start text-primary bg-primary/10 px-2 py-0.5 rounded text-[11px] uppercase tracking-wide font-semibold">
         {project.category}
       </span>
-
-      {/* Title */}
       <h3 className="font-sans font-extrabold text-lg sm:text-xl text-accent leading-tight">
         {project.title}
       </h3>
-
-      {/* Short description */}
-      <p className="text-accent/70 text-sm leading-relaxed flex-1">
-        {project.short}
-      </p>
-
-      {/* Tech tags */}
+      <p className="text-accent/70 text-sm leading-relaxed flex-1">{project.short}</p>
       <div className="flex flex-wrap gap-1.5 mt-auto">
         {project.tech.map((tag) => (
-          <span
-            key={tag}
-            className="text-[11px] px-2 py-0.5 rounded border border-accent/20 text-accent/60 font-medium"
-          >
+          <span key={tag} className="text-[11px] px-2 py-0.5 rounded border border-accent/20 text-accent/60 font-medium">
             {tag}
           </span>
         ))}
       </div>
-
-      {/* GitHub link */}
       <a
         href={project.github}
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        aria-label={`GitHub repository for ${project.title}`}
+        aria-label={`GitHub — ${project.title}`}
         className="self-start text-accent/40 hover:text-primary transition-colors mt-1"
       >
         <GithubIcon className="w-4 h-4" />
@@ -156,13 +130,8 @@ function CollapsedCard({
   );
 }
 
-function ExpandedCard({
-  project,
-  onClose,
-}: {
-  project: Project;
-  onClose: () => void;
-}) {
+/* ─── Desktop: expanded card (inline, full row) ─── */
+function ExpandedCard({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
     <motion.div
       key={project.id}
@@ -172,7 +141,6 @@ function ExpandedCard({
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white border-2 border-primary rounded-[4px] p-6 sm:p-8 relative"
     >
-      {/* Close button */}
       <button
         onClick={onClose}
         aria-label="Close project details"
@@ -180,35 +148,22 @@ function ExpandedCard({
       >
         ×
       </button>
-
-      {/* Category badge */}
       <span className="inline-block text-primary bg-primary/10 px-2 py-0.5 rounded text-[11px] uppercase tracking-wide font-semibold mb-3">
         {project.category}
       </span>
-
-      {/* Title */}
       <h3 className="font-sans font-extrabold text-2xl sm:text-3xl text-accent leading-tight mb-4 pr-8">
         {project.title}
       </h3>
-
-      {/* Full description */}
       <p className="text-accent/75 text-base sm:text-lg leading-relaxed mb-6 max-w-2xl">
         {project.description}
       </p>
-
-      {/* Tech tags (larger) */}
       <div className="flex flex-wrap gap-2 mb-6">
         {project.tech.map((tag) => (
-          <span
-            key={tag}
-            className="text-sm px-3 py-1 rounded border border-primary/30 text-primary font-semibold bg-primary/5"
-          >
+          <span key={tag} className="text-sm px-3 py-1 rounded border border-primary/30 text-primary font-semibold bg-primary/5">
             {tag}
           </span>
         ))}
       </div>
-
-      {/* GitHub button */}
       <a
         href={project.github}
         target="_blank"
@@ -224,66 +179,180 @@ function ExpandedCard({
 
 export default function Projects() {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const expandedProject = PROJECTS.find((p) => p.id === expanded) ?? null;
 
-  const handleCardClick = (id: string) => {
-    setExpanded((prev) => (prev === id ? null : id));
-  };
-
-  const handleClose = () => setExpanded(null);
+  const close = () => setExpanded(null);
 
   return (
-    <section
-      data-section="deux"
-      aria-hidden="true"
-      className="home-section bg-bg"
-    >
-      {/* Scrollable wrapper — fits within 100dvh, scrolls internally on mobile */}
-      <div className="w-full h-full overflow-y-auto flex flex-col lg:justify-center">
-      <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 max-w-6xl mx-auto py-24 lg:py-20">
-        {/* Section heading */}
+    <section data-section="deux" aria-hidden="true" className="home-section bg-bg">
+
+      {/* ════════════════════════════════════════
+          MOBILE layout (hidden on sm+)
+          2×3 compact grid — all cards on one screen
+          Click → full-screen modal popup
+      ════════════════════════════════════════ */}
+
+      {/* Modal backdrop */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            key="mobile-backdrop"
+            className="fixed inset-0 z-40 bg-accent/70 sm:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={close}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Modal card */}
+      <AnimatePresence>
+        {expanded && expandedProject && (
+          <motion.div
+            key="mobile-modal"
+            className="fixed inset-x-3 top-14 bottom-8 z-50 bg-bg rounded-xl shadow-2xl overflow-y-auto sm:hidden"
+            initial={{ opacity: 0, scale: 0.95, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="p-5 flex flex-col min-h-full">
+              {/* Close button */}
+              <button
+                onClick={close}
+                aria-label="Close"
+                className="self-end mb-4 w-9 h-9 flex items-center justify-center rounded-full border border-accent/20 text-accent/50 hover:text-accent hover:border-accent/40 text-xl leading-none transition-colors shrink-0"
+              >
+                ×
+              </button>
+
+              <span className="self-start text-primary bg-primary/10 px-2 py-0.5 rounded text-[11px] uppercase tracking-wide font-semibold mb-3">
+                {expandedProject.category}
+              </span>
+
+              <h3 className="font-sans font-extrabold text-2xl text-accent leading-tight mb-4">
+                {expandedProject.title}
+              </h3>
+
+              <p className="text-accent/75 text-base leading-relaxed mb-6 flex-1">
+                {expandedProject.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-6">
+                {expandedProject.tech.map((tag) => (
+                  <span key={tag} className="text-sm px-3 py-1 rounded border border-primary/30 text-primary font-semibold bg-primary/5">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <a
+                href={expandedProject.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-accent text-bg px-5 py-3 rounded-[4px] text-sm font-semibold hover:bg-primary transition-colors duration-200"
+              >
+                <GithubIcon className="w-4 h-4" />
+                View on GitHub
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile section body: heading + 2×3 grid */}
+      <div className="sm:hidden w-full h-full flex flex-col px-4 pt-20 pb-5">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="font-sans font-extrabold text-3xl sm:text-4xl lg:text-5xl text-accent mb-8 sm:mb-10"
+          transition={{ duration: 0.45 }}
+          className="font-sans font-extrabold text-2xl text-accent mb-3 shrink-0"
         >
           Projects
         </motion.h2>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          <AnimatePresence mode="popLayout">
-            {expanded ? (
-              <>
-                <ExpandedCard
-                  key={`expanded-${expanded}`}
-                  project={PROJECTS.find((p) => p.id === expanded)!}
-                  onClose={handleClose}
-                />
-                {PROJECTS.filter((p) => p.id !== expanded).map((project, i) => (
+        {/* 2 cols × 3 rows, fills remaining height */}
+        <div className="grid grid-cols-2 grid-rows-3 gap-2 flex-1 min-h-0">
+          {PROJECTS.map((project, i) => (
+            <motion.button
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              onClick={() => setExpanded(project.id)}
+              className="bg-white border border-accent/15 rounded-lg p-3 flex flex-col text-left active:scale-[0.97] transition-transform duration-100"
+            >
+              <span className="self-start text-primary bg-primary/10 px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wide font-semibold mb-2 shrink-0">
+                {project.category}
+              </span>
+              <h3 className="font-sans font-bold text-accent text-sm leading-snug flex-1 line-clamp-3">
+                {project.title}
+              </h3>
+              <div className="flex gap-1 flex-wrap mt-2 shrink-0">
+                {project.tech.slice(0, 2).map((tag) => (
+                  <span key={tag} className="text-[10px] text-accent/50 border border-accent/15 px-1.5 py-0.5 rounded">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* ════════════════════════════════════════
+          DESKTOP layout (hidden on mobile)
+          Inline expansion within grid
+      ════════════════════════════════════════ */}
+      <div className="hidden sm:flex w-full h-full overflow-y-auto flex-col lg:justify-center">
+        <div className="w-full flex flex-col px-10 lg:px-16 max-w-6xl mx-auto py-20">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="font-sans font-extrabold text-4xl lg:text-5xl text-accent mb-10"
+          >
+            Projects
+          </motion.h2>
+
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            <AnimatePresence mode="popLayout">
+              {expanded ? (
+                <>
+                  <ExpandedCard
+                    key={`expanded-${expanded}`}
+                    project={PROJECTS.find((p) => p.id === expanded)!}
+                    onClose={close}
+                  />
+                  {PROJECTS.filter((p) => p.id !== expanded).map((project, i) => (
+                    <CollapsedCard
+                      key={project.id}
+                      project={project}
+                      index={i}
+                      onClick={() => setExpanded((prev) => (prev === project.id ? null : project.id))}
+                    />
+                  ))}
+                </>
+              ) : (
+                PROJECTS.map((project, i) => (
                   <CollapsedCard
                     key={project.id}
                     project={project}
                     index={i}
-                    onClick={() => handleCardClick(project.id)}
+                    onClick={() => setExpanded(project.id)}
                   />
-                ))}
-              </>
-            ) : (
-              PROJECTS.map((project, i) => (
-                <CollapsedCard
-                  key={project.id}
-                  project={project}
-                  index={i}
-                  onClick={() => handleCardClick(project.id)}
-                />
-              ))
-            )}
-          </AnimatePresence>
+                ))
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
-      </div>
+
     </section>
   );
 }
