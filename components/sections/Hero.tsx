@@ -9,19 +9,20 @@ export default function Hero() {
       aria-hidden="false"
       className="home-section flex-col bg-bg overflow-hidden"
     >
-      {/* Background images: raw img to preserve full quality */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/bg_desktop.png"
-        alt=""
-        className="hidden sm:block absolute inset-0 w-full h-full object-cover"
-      />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/bg_mobile.png"
-        alt=""
-        className="sm:hidden absolute inset-0 w-full h-full object-cover object-bottom"
-      />
+      {/* Background images — WebP for performance, PNG fallback */}
+      <picture className="absolute inset-0 w-full h-full">
+        <source srcSet="/images/bg_desktop.webp" type="image/webp" media="(min-width: 640px)" />
+        <source srcSet="/images/bg_desktop.png" type="image/png" media="(min-width: 640px)" />
+        <source srcSet="/images/bg_mobile.webp" type="image/webp" />
+        <source srcSet="/images/bg_mobile.png" type="image/png" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/bg_mobile.png"
+          alt=""
+          className="w-full h-full object-cover object-bottom sm:object-center"
+          fetchPriority="high"
+        />
+      </picture>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1 w-full px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40">

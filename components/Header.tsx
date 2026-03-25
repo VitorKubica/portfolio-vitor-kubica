@@ -53,16 +53,19 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    function onScroll() {
-      const main = document.querySelector("main");
-      setCompact((main?.scrollTop ?? window.scrollY) > 200);
-    }
     const main = document.querySelector("main");
-    main?.addEventListener("scroll", onScroll);
-    window.addEventListener("scroll", onScroll);
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setCompact((main?.scrollTop ?? window.scrollY) > 200);
+        ticking = false;
+      });
+    }
+    main?.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       main?.removeEventListener("scroll", onScroll);
-      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 

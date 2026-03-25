@@ -255,7 +255,18 @@ export default function Experience() {
 
           {/* Right: timeline */}
           <div className="flex-1 relative">
-            <div className="absolute left-[7px] top-2 bottom-2 w-px bg-bg/20 hidden sm:block" />
+            {/* Static dim line */}
+            <div className="absolute left-[7px] top-2 bottom-2 w-px bg-bg/15 hidden sm:block">
+              {/* Animated bright line growing from top */}
+              <motion.div
+                className="absolute inset-x-0 top-0 bg-bg/55 origin-top"
+                initial={{ scaleY: 0 }}
+                whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.4, ease: "easeInOut", delay: 0.4 }}
+                style={{ height: "100%" }}
+              />
+            </div>
 
             <ol className="list-none p-0 m-0 space-y-10 sm:space-y-12">
               {EXPERIENCES.map((exp, index) => (
@@ -264,10 +275,16 @@ export default function Experience() {
                   className="relative sm:pl-10"
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.15, ease: "easeOut" }}
                   viewport={{ once: true }}
                 >
-                  <span className="hidden sm:block absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-bg/60 bg-primary" />
+                  <motion.span
+                    className="hidden sm:block absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-bg/60 bg-primary"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.5 + index * 0.2, type: "spring", stiffness: 300 }}
+                  />
 
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2">

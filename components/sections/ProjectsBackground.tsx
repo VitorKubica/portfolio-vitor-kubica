@@ -116,6 +116,7 @@ export default function ProjectsBackground() {
     const octEdges = buildOctahedron(1);
 
     let rafId: number;
+    let visible = true;
     let rxS = 0.4, ryS = 0;    // sphere rotation state
     let rxO = 0.6, ryO = 0.8;  // octahedron rotation state
 
@@ -129,6 +130,7 @@ export default function ProjectsBackground() {
     ro.observe(canvas);
 
     const draw = () => {
+      if (!visible) { rafId = requestAnimationFrame(draw); return; }
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -136,21 +138,33 @@ export default function ProjectsBackground() {
       const fov = Math.min(w, h) * 1.1;
       const baseR = Math.min(w, h) * 0.32;
 
-      // ── Sphere (top-right, slightly off-canvas) ──────────
+      // ── Both shapes in one batch (same color) ─────────────
+      ctx.beginPath();
       const sR = baseR;
-      const sEdges = sphereEdges.map(
-        ([a, b]) =>
-          [[a[0] * sR, a[1] * sR, a[2] * sR], [b[0] * sR, b[1] * sR, b[2] * sR]] as [V3, V3]
-      );
-      drawShape(ctx, sEdges, rxS, ryS, fov, w * 0.78, h * 0.18, "rgba(20,20,19,0.10)", 0.8);
-
-      // ── Octahedron (bottom-left) ──────────────────────────
+      for (const [a, b] of sphereEdges) {
+        const sa: V3 = [a[0] * sR, a[1] * sR, a[2] * sR];
+        const sb: V3 = [b[0] * sR, b[1] * sR, b[2] * sR];
+        const ra = rotX(rotY(sa, ryS), rxS);
+        const rb = rotX(rotY(sb, ryS), rxS);
+        const pa = project(ra, fov, w * 0.78, h * 0.18);
+        const pb = project(rb, fov, w * 0.78, h * 0.18);
+        ctx.moveTo(pa[0], pa[1]);
+        ctx.lineTo(pb[0], pb[1]);
+      }
       const oR = baseR * 0.52;
-      const oEdges = octEdges.map(
-        ([a, b]) =>
-          [[a[0] * oR, a[1] * oR, a[2] * oR], [b[0] * oR, b[1] * oR, b[2] * oR]] as [V3, V3]
-      );
-      drawShape(ctx, oEdges, rxO, ryO, fov, w * 0.18, h * 0.72, "rgba(20,20,19,0.10)", 0.8);
+      for (const [a, b] of octEdges) {
+        const oa: V3 = [a[0] * oR, a[1] * oR, a[2] * oR];
+        const ob: V3 = [b[0] * oR, b[1] * oR, b[2] * oR];
+        const ra = rotX(rotY(oa, ryO), rxO);
+        const rb = rotX(rotY(ob, ryO), rxO);
+        const pa = project(ra, fov, w * 0.18, h * 0.72);
+        const pb = project(rb, fov, w * 0.18, h * 0.72);
+        ctx.moveTo(pa[0], pa[1]);
+        ctx.lineTo(pb[0], pb[1]);
+      }
+      ctx.strokeStyle = "rgba(20,20,19,0.10)";
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
 
       // ── Advance rotations ─────────────────────────────────
       rxS += 0.0018;
@@ -163,9 +177,16 @@ export default function ProjectsBackground() {
 
     draw();
 
+    const io = new IntersectionObserver(
+      ([e]) => { visible = e.isIntersecting; },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
     return () => {
       cancelAnimationFrame(rafId);
       ro.disconnect();
+      io.disconnect();
     };
   }, []);
 

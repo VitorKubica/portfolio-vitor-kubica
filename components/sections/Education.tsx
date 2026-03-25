@@ -133,6 +133,7 @@ export default function Education() {
     const DPR = window.devicePixelRatio || 1;
     let time = 0;
     let rafId: number;
+    let visible = true;
 
     const resize = () => {
       canvas.width  = canvas.offsetWidth  * DPR;
@@ -142,6 +143,7 @@ export default function Education() {
     window.addEventListener("resize", resize);
 
     const tick = () => {
+      if (!visible) { rafId = requestAnimationFrame(tick); return; }
       const W = canvas.width, H = canvas.height;
       const w = W / DPR, h = H / DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -191,19 +193,16 @@ export default function Education() {
         pz.push(rz2);
       }
 
-      /* Draw edges — alpha varies with depth */
+      /* Draw edges — batched into single path for performance */
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(210,205,190,0.18)";
+      ctx.lineWidth = 0.9;
       EDGES.forEach(([a, b]) => {
         if (a >= effectiveTotal || b >= effectiveTotal) return;
-        const avgZ = (pz[a] + pz[b]) / 2;
-        const alpha = 0.18 + avgZ * 0.15;
-        if (alpha <= 0.02) return;
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(210,205,190,${Math.min(0.35, Math.max(0.05, alpha))})`;
-        ctx.lineWidth = 0.9;
         ctx.moveTo(px[a], py[a]);
         ctx.lineTo(px[b], py[b]);
-        ctx.stroke();
       });
+      ctx.stroke();
 
       /* Draw decorative dots — fade in/out */
       for (let i = CERT_COUNT; i < effectiveTotal; i++) {
@@ -233,10 +232,17 @@ export default function Education() {
       rafId = requestAnimationFrame(tick);
     };
 
+    const io = new IntersectionObserver(
+      ([e]) => { visible = e.isIntersecting; },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
     tick();
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
+      io.disconnect();
     };
   }, []);
 
