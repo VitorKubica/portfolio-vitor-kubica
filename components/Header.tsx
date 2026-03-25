@@ -82,7 +82,7 @@ export default function Header() {
         id="logo"
         href="/"
         aria-label="Logo, go to homepage."
-        className={`relative z-[999] flex flex-col transition-all duration-500 ${logoOnDark ? "text-bg" : "text-accent"} ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+        className={`relative z-[999] flex flex-col transition-all duration-500 ${menuOpen ? "max-sm:!text-accent" : ""} ${logoOnDark ? "text-bg" : "text-accent"} ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
       >
         <span
           className={`block font-serif text-3xl sm:text-4xl font-bold italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
@@ -102,7 +102,7 @@ export default function Header() {
         aria-expanded={menuOpen}
         onClick={toggleMenu}
         className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-300 ${
-          menuOpen ? "text-accent" : logoOnDark ? "text-bg" : "text-accent"
+          menuOpen ? "text-accent" : currentSection === "une" ? "text-bg sm:text-accent" : logoOnDark ? "text-bg" : "text-accent"
         } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span

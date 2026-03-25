@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SectionProvider } from "@/components/SectionContext";
 import Header from "@/components/Header";
@@ -11,6 +12,13 @@ const geistSans = localFont({
     { path: "./fonts/geist-latin-ext.woff2", weight: "100 900", style: "normal" },
   ],
   variable: "--font-geist-sans",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  style: ["italic"],
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -27,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} antialiased`}
+      className={`${geistSans.variable} ${playfair.variable} antialiased`}
     >
       <body className="min-h-dvh bg-bg text-accent">
         <SectionProvider>

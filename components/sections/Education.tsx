@@ -365,7 +365,10 @@ export default function Education() {
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-bg/40 mb-1">
             Academic Background
           </p>
-          <h2 className="font-bold text-3xl sm:text-4xl text-bg leading-tight">
+          <h2
+            className="font-bold text-3xl sm:text-4xl text-bg leading-tight italic"
+            style={{ fontFamily: "var(--font-playfair)" }}
+          >
             Education
           </h2>
           <div className="mt-2 mb-6 w-10 h-[3px] bg-bg/30 rounded-full" />
@@ -410,7 +413,10 @@ export default function Education() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-bg/40 mb-0.5">
               Professional Development
             </p>
-            <h2 className="font-extrabold text-2xl text-bg leading-tight">
+            <h2
+              className="font-extrabold text-2xl text-bg leading-tight italic"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
               Certificates
             </h2>
             <p className="text-bg/20 text-[11px] mt-0.5">tap a node to view</p>
