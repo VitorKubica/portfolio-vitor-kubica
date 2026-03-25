@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const SOCIAL_LINKS = [
   { label: "GH", href: "https://github.com/vitorkubica", ariaLabel: "Vitor on GitHub" },
@@ -16,7 +16,7 @@ export default function Footer() {
     >
       <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 py-16 lg:py-20 max-w-6xl mx-auto">
         {/* Footer main */}
-        <motion.div
+        <m.div
           className="footer-main w-full flex flex-col sm:flex-row gap-10 sm:gap-20 mb-14"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -48,10 +48,10 @@ export default function Footer() {
               </a>
             </li>
           </ul>
-        </motion.div>
+        </m.div>
 
         {/* Footer bottom */}
-        <motion.div
+        <m.div
           className="footer-bottom w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-8 text-sm sm:text-base border-t border-bg/15"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -75,7 +75,7 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </motion.div>
+        </m.div>
       </div>
     </footer>
   );

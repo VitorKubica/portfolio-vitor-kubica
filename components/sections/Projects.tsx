@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import ProjectsBackground from "./ProjectsBackground";
 
 type Project = {
@@ -95,7 +95,7 @@ function GithubIcon({ className }: { className?: string }) {
 /* ─── Desktop: collapsed card (inline grid) ─── */
 function CollapsedCard({ project, index, onClick }: { project: Project; index: number; onClick: () => void }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -127,14 +127,14 @@ function CollapsedCard({ project, index, onClick }: { project: Project; index: n
       >
         <GithubIcon className="w-4 h-4" />
       </a>
-    </motion.div>
+    </m.div>
   );
 }
 
 /* ─── Desktop: expanded card (inline, full row) ─── */
 function ExpandedCard({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
-    <motion.div
+    <m.div
       key={project.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -174,7 +174,7 @@ function ExpandedCard({ project, onClose }: { project: Project; onClose: () => v
         <GithubIcon className="w-4 h-4" />
         View on GitHub
       </a>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -197,7 +197,7 @@ export default function Projects() {
       {/* Modal backdrop */}
       <AnimatePresence>
         {expanded && (
-          <motion.div
+          <m.div
             key="mobile-backdrop"
             className="fixed inset-0 z-40 bg-accent/70 sm:hidden"
             initial={{ opacity: 0 }}
@@ -212,7 +212,7 @@ export default function Projects() {
       {/* Modal card */}
       <AnimatePresence>
         {expanded && expandedProject && (
-          <motion.div
+          <m.div
             key="mobile-modal"
             className="fixed inset-x-3 top-14 bottom-8 z-50 bg-bg rounded-xl shadow-2xl overflow-y-auto sm:hidden"
             initial={{ opacity: 0, scale: 0.95, y: 24 }}
@@ -260,13 +260,13 @@ export default function Projects() {
                 View on GitHub
               </a>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* Mobile section body: heading + 2×3 grid */}
       <div className="sm:hidden relative z-10 w-full h-full flex flex-col px-4 pt-20 pb-5">
-        <motion.h2
+        <m.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -274,12 +274,12 @@ export default function Projects() {
           className="font-sans font-extrabold text-2xl text-accent mb-3 shrink-0"
         >
           Projects
-        </motion.h2>
+        </m.h2>
 
         {/* 2 cols × 3 rows, fills remaining height */}
         <div className="grid grid-cols-2 grid-rows-3 gap-2 flex-1 min-h-0">
           {PROJECTS.map((project, i) => (
-            <motion.button
+            <m.button
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -301,7 +301,7 @@ export default function Projects() {
                   </span>
                 ))}
               </div>
-            </motion.button>
+            </m.button>
           ))}
         </div>
       </div>
@@ -312,7 +312,7 @@ export default function Projects() {
       ════════════════════════════════════════ */}
       <div className="hidden sm:flex relative z-10 w-full h-full overflow-y-auto flex-col lg:justify-center">
         <div className="w-full flex flex-col px-10 lg:px-16 max-w-6xl mx-auto py-20">
-          <motion.h2
+          <m.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -320,7 +320,7 @@ export default function Projects() {
             className="font-sans font-extrabold text-4xl lg:text-5xl text-accent mb-10"
           >
             Projects
-          </motion.h2>
+          </m.h2>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             <AnimatePresence mode="popLayout">

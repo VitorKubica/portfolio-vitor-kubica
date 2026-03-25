@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 const EXPERIENCES = [
   {
@@ -74,7 +74,7 @@ export default function Experience() {
       {/* Backdrop */}
       <AnimatePresence>
         {selected && (
-          <motion.div
+          <m.div
             key="exp-backdrop"
             className="fixed inset-0 z-40 bg-accent/75 sm:hidden"
             initial={{ opacity: 0 }}
@@ -89,7 +89,7 @@ export default function Experience() {
       {/* Modal sheet */}
       <AnimatePresence>
         {selected && (
-          <motion.div
+          <m.div
             key="exp-modal"
             className="fixed inset-x-3 top-14 bottom-8 z-50 bg-bg rounded-xl overflow-y-auto shadow-2xl sm:hidden"
             initial={{ opacity: 0, y: 40, scale: 0.96 }}
@@ -137,7 +137,7 @@ export default function Experience() {
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -148,7 +148,7 @@ export default function Experience() {
       <div className="sm:hidden w-full h-full flex flex-col px-5 pt-20 pb-7">
 
         {/* Heading */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -161,7 +161,7 @@ export default function Experience() {
           <p className="text-bg/40 text-xs mt-1">
             Tap an entry to see details
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Timeline */}
         <div className="flex-1 relative flex flex-col justify-between min-h-0">
@@ -169,7 +169,7 @@ export default function Experience() {
           {/* Static dim line (full height, background) */}
           <div className="absolute left-[5px] top-1 bottom-1 w-px bg-bg/15">
             {/* Animated bright line growing from top */}
-            <motion.div
+            <m.div
               className="absolute inset-x-0 top-0 bg-bg/55 origin-top"
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
@@ -181,7 +181,7 @@ export default function Experience() {
 
           {/* Entries */}
           {EXPERIENCES.map((exp, i) => (
-            <motion.div
+            <m.div
               key={exp.company}
               className="relative pl-8"
               initial={{ opacity: 0, x: -16 }}
@@ -190,7 +190,7 @@ export default function Experience() {
               transition={{ duration: 0.4, delay: 0.5 + i * 0.15 }}
             >
               {/* Dot */}
-              <motion.span
+              <m.span
                 className="absolute left-0 top-1 w-[11px] h-[11px] rounded-full border-2 border-bg/70 bg-primary"
                 initial={{ scale: 0, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
@@ -226,7 +226,7 @@ export default function Experience() {
                   <path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -238,7 +238,7 @@ export default function Experience() {
         <div className="w-full flex flex-col lg:flex-row items-start lg:items-center gap-10 lg:gap-16 px-10 lg:px-16 max-w-7xl mx-auto py-20 lg:py-0">
 
           {/* Left: heading */}
-          <motion.div
+          <m.div
             className="lg:sticky lg:top-0 shrink-0 lg:w-64 xl:w-72"
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -251,14 +251,14 @@ export default function Experience() {
             <p className="mt-4 text-bg/50 text-sm leading-relaxed max-w-xs">
               A timeline of the roles and projects that shaped my engineering practice.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Right: timeline */}
           <div className="flex-1 relative">
             {/* Static dim line */}
             <div className="absolute left-[7px] top-2 bottom-2 w-px bg-bg/15 hidden sm:block">
               {/* Animated bright line growing from top */}
-              <motion.div
+              <m.div
                 className="absolute inset-x-0 top-0 bg-bg/55 origin-top"
                 initial={{ scaleY: 0 }}
                 whileInView={{ scaleY: 1 }}
@@ -270,7 +270,7 @@ export default function Experience() {
 
             <ol className="list-none p-0 m-0 space-y-10 sm:space-y-12">
               {EXPERIENCES.map((exp, index) => (
-                <motion.li
+                <m.li
                   key={`${exp.company}-${index}`}
                   className="relative sm:pl-10"
                   initial={{ opacity: 0, x: -30 }}
@@ -278,7 +278,7 @@ export default function Experience() {
                   transition={{ duration: 0.5, delay: 0.3 + index * 0.15, ease: "easeOut" }}
                   viewport={{ once: true }}
                 >
-                  <motion.span
+                  <m.span
                     className="hidden sm:block absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-bg/60 bg-primary"
                     initial={{ scale: 0, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
@@ -310,7 +310,7 @@ export default function Experience() {
                       ))}
                     </ul>
                   </div>
-                </motion.li>
+                </m.li>
               ))}
             </ol>
           </div>

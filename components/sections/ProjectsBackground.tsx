@@ -75,32 +75,6 @@ function buildOctahedron(r: number): [V3, V3][] {
   return edges;
 }
 
-/* ─── draw helper ────────────────────────────────────────── */
-function drawShape(
-  ctx: CanvasRenderingContext2D,
-  edges: [V3, V3][],
-  rx: number,
-  ry: number,
-  fov: number,
-  cx: number,
-  cy: number,
-  color: string,
-  lineWidth: number,
-) {
-  ctx.beginPath();
-  for (const [a, b] of edges) {
-    const ra = rotX(rotY(a, ry), rx);
-    const rb = rotX(rotY(b, ry), rx);
-    const pa = project(ra, fov, cx, cy);
-    const pb = project(rb, fov, cx, cy);
-    ctx.moveTo(pa[0], pa[1]);
-    ctx.lineTo(pb[0], pb[1]);
-  }
-  ctx.strokeStyle = color;
-  ctx.lineWidth = lineWidth;
-  ctx.stroke();
-}
-
 /* ─── component ──────────────────────────────────────────── */
 export default function ProjectsBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -117,23 +91,31 @@ export default function ProjectsBackground() {
 
     let rafId: number;
     let visible = true;
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // throttle to ~30fps (decorative)
     let rxS = 0.4, ryS = 0;    // sphere rotation state
     let rxO = 0.6, ryO = 0.8;  // octahedron rotation state
+    const DPR = window.devicePixelRatio || 1;
 
     const resize = () => {
-      canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-      canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      canvas.width = canvas.offsetWidth * DPR;
+      canvas.height = canvas.offsetHeight * DPR;
     };
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    const draw = () => {
-      if (!visible) { rafId = requestAnimationFrame(draw); return; }
+    const draw = (now: number) => {
+      rafId = requestAnimationFrame(draw);
+      if (!visible) return;
+      const delta = now - lastFrame;
+      if (delta < FRAME_INTERVAL) return;
+      lastFrame = now - (delta % FRAME_INTERVAL);
+
       const w = canvas.offsetWidth;
       const h = canvas.offsetHeight;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, w, h);
 
       const fov = Math.min(w, h) * 1.1;
       const baseR = Math.min(w, h) * 0.32;
@@ -166,16 +148,15 @@ export default function ProjectsBackground() {
       ctx.lineWidth = 0.8;
       ctx.stroke();
 
-      // ── Advance rotations ─────────────────────────────────
-      rxS += 0.0018;
-      ryS += 0.0032;
-      rxO += 0.0024;
-      ryO -= 0.0018;
-
-      rafId = requestAnimationFrame(draw);
+      // ── Advance rotations (scaled by actual delta) ─────────
+      const dt = delta / 16.67; // normalize to 60fps step
+      rxS += 0.0018 * dt;
+      ryS += 0.0032 * dt;
+      rxO += 0.0024 * dt;
+      ryO -= 0.0018 * dt;
     };
 
-    draw();
+    rafId = requestAnimationFrame(draw);
 
     const io = new IntersectionObserver(
       ([e]) => { visible = e.isIntersecting; },

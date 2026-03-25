@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function Hero() {
   return (
@@ -9,24 +9,21 @@ export default function Hero() {
       aria-hidden="false"
       className="home-section flex-col bg-bg overflow-hidden"
     >
-      {/* Background images — WebP for performance, PNG fallback */}
+      {/* Background — WebP only (97%+ browser support) */}
       <picture className="absolute inset-0 w-full h-full">
         <source srcSet="/images/bg_desktop.webp" type="image/webp" media="(min-width: 640px)" />
-        <source srcSet="/images/bg_desktop.png" type="image/png" media="(min-width: 640px)" />
-        <source srcSet="/images/bg_mobile.webp" type="image/webp" />
-        <source srcSet="/images/bg_mobile.png" type="image/png" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/bg_mobile.png"
+          src="/images/bg_mobile.webp"
           alt=""
           className="w-full h-full object-cover object-bottom sm:object-center"
           fetchPriority="high"
+          decoding="async"
         />
       </picture>
 
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1 w-full px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40">
-        <motion.h1
+        <m.h1
           className="m-0 font-sans text-[48px] sm:text-[64px] lg:text-[96px] font-extrabold leading-[1.05] text-bg tracking-tight"
           aria-label="FullStack Developer."
           initial={{ opacity: 0, y: 40 }}
@@ -38,9 +35,9 @@ export default function Hero() {
             <br />
             Developer<span className="text-bg/60">.</span>
           </span>
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           className="mt-6 text-bg/80 text-base sm:text-lg leading-relaxed max-w-lg"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,9 +46,9 @@ export default function Hero() {
           Crafting solid, scalable products
           <br />
           with great user experiences.
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
@@ -64,11 +61,11 @@ export default function Hero() {
           >
             Download CV
           </a>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Bottom highlights */}
-      <motion.div
+      <m.div
         className="hidden sm:flex relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-8 lg:pb-14 mt-auto"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -84,7 +81,7 @@ export default function Hero() {
             countries.
           </li>
         </ul>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

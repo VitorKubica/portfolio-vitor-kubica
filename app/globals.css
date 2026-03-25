@@ -57,6 +57,7 @@ main {
   height: 100dvh;
   overflow: hidden;
   scroll-snap-align: start;
+  contain: layout style paint;
 }
 
 /* ── Cavalier entrance animation ── */
@@ -86,17 +87,21 @@ main {
 .cavalier h2,
 .cavalier p {
   transition: transform 0.5s, opacity 0.2s;
+  will-change: transform, opacity;
 }
 
 .work-illo {
   transition: transform 0.5s 400ms, opacity 0.2s 400ms;
+  will-change: transform, opacity;
 }
 
 .footer-main {
   transition: transform 0.5s 300ms, opacity 0.2s 300ms;
+  will-change: transform, opacity;
 }
 .footer-bottom {
   transition: transform 0.5s 500ms, opacity 0.2s 500ms;
+  will-change: transform, opacity;
 }
 
 /* ── Section nav visibility ── */
@@ -171,4 +176,13 @@ blockquote,
 }
 .animate-fade-in {
   animation: fade-in 0.5s ease forwards;
+}
+
+/* ── Reduce motion for users who prefer it (only keyframe animations, not transitions) ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

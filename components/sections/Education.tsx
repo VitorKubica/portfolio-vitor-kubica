@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 
 /* ─── data ─────────────────────────────────────────────── */
 
@@ -134,29 +134,37 @@ export default function Education() {
     let time = 0;
     let rafId: number;
     let visible = true;
+    let lastFrame = 0;
+    const FRAME_INTERVAL = 1000 / 30; // throttle to ~30fps (decorative)
+    const TWO_PI = Math.PI * 2;
 
     const resize = () => {
       canvas.width  = canvas.offsetWidth  * DPR;
       canvas.height = canvas.offsetHeight * DPR;
     };
     resize();
-    window.addEventListener("resize", resize);
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
 
-    const tick = () => {
-      if (!visible) { rafId = requestAnimationFrame(tick); return; }
-      const W = canvas.width, H = canvas.height;
-      const w = W / DPR, h = H / DPR;
+    const tick = (now: number) => {
+      rafId = requestAnimationFrame(tick);
+      if (!visible) return;
+      const delta = now - lastFrame;
+      if (delta < FRAME_INTERVAL) return;
+      lastFrame = now - (delta % FRAME_INTERVAL);
+
+      const w = canvas.width / DPR, h = canvas.height / DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      time += 0.016;
+      time += 0.016 * (delta / 16.67);
 
       const isMobile = w < 640;
       const effectiveTotal = isMobile ? CERT_COUNT + MOBILE_DECO_COUNT : TOTAL;
 
       /* Lissajous-style dual rotation — natural organic feel */
-      const rotY = time * 0.10;               // horizontal swing
-      const rotX = Math.sin(time * 0.07) * 0.35; // vertical rocks back & forth
+      const rotY = time * 0.10;
+      const rotX = Math.sin(time * 0.07) * 0.35;
       const cosRY = Math.cos(rotY), sinRY = Math.sin(rotY);
       const cosRX = Math.cos(rotX), sinRX = Math.sin(rotX);
 
@@ -164,22 +172,18 @@ export default function Education() {
       const drift = 12;
       const px: number[] = [];
       const py: number[] = [];
-      const pz: number[] = [];
       for (let i = 0; i < effectiveTotal; i++) {
         const bx = ALL_X[i] - 0.5;
         const by = ALL_Y[i] - 0.5;
         const bz = NODE_Z[i];
 
-        /* Rotate around Y axis (horizontal) */
-        let rx = bx * cosRY + bz * sinRY;
-        let ry = by;
-        let rz = -bx * sinRY + bz * cosRY;
+        const rx = bx * cosRY + bz * sinRY;
+        const ry = by;
+        const rz = -bx * sinRY + bz * cosRY;
 
-        /* Then rotate around X axis (vertical tilt) */
         const ry2 = ry * cosRX - rz * sinRX;
         const rz2 = ry * sinRX + rz * cosRX;
 
-        /* Subtle perspective */
         const persp = 1 + rz2 * 0.15;
 
         px.push(
@@ -190,21 +194,23 @@ export default function Education() {
           (0.5 + ry2 * persp) * h
           + Math.cos(time * SPEED[i] + PHASE_Y[i]) * drift
         );
-        pz.push(rz2);
       }
 
-      /* Draw edges — batched into single path for performance */
+      /* Draw edges — batched into single path */
       ctx.beginPath();
       ctx.strokeStyle = "rgba(210,205,190,0.18)";
       ctx.lineWidth = 0.9;
-      EDGES.forEach(([a, b]) => {
-        if (a >= effectiveTotal || b >= effectiveTotal) return;
+      for (let e = 0; e < EDGES.length; e++) {
+        const a = EDGES[e][0], b = EDGES[e][1];
+        if (a >= effectiveTotal || b >= effectiveTotal) continue;
         ctx.moveTo(px[a], py[a]);
         ctx.lineTo(px[b], py[b]);
-      });
+      }
       ctx.stroke();
 
-      /* Draw decorative dots — fade in/out */
+      /* Draw decorative dots — batched by alpha ranges for fewer state changes */
+      ctx.fillStyle = "rgba(220,215,200,0.5)";
+      ctx.beginPath();
       for (let i = CERT_COUNT; i < effectiveTotal; i++) {
         const decoIdx = i - CERT_COUNT;
         const baseR = DECO_POSITIONS[decoIdx].size;
@@ -212,11 +218,10 @@ export default function Education() {
         const alpha = 0.08 + fade * 0.82;
         if (alpha < 0.06) continue;
 
-        ctx.beginPath();
-        ctx.arc(px[i], py[i], baseR, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(220,215,200,${alpha.toFixed(2)})`;
-        ctx.fill();
+        ctx.moveTo(px[i] + baseR, py[i]);
+        ctx.arc(px[i], py[i], baseR, 0, TWO_PI);
       }
+      ctx.fill();
 
       /* Update cert label positions + subtle breathing scale */
       for (let i = 0; i < CERT_COUNT; i++) {
@@ -228,8 +233,6 @@ export default function Education() {
           el.style.transform = `translate(-50%,-50%) scale(${scale.toFixed(3)})`;
         }
       }
-
-      rafId = requestAnimationFrame(tick);
     };
 
     const io = new IntersectionObserver(
@@ -238,10 +241,10 @@ export default function Education() {
     );
     io.observe(canvas);
 
-    tick();
+    rafId = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
+      ro.disconnect();
       io.disconnect();
     };
   }, []);
@@ -256,7 +259,7 @@ export default function Education() {
       {/* ── POPUP ─────────────────────────────────────── */}
       <AnimatePresence>
         {popup !== null && (
-          <motion.div
+          <m.div
             key="pop-bg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -265,12 +268,12 @@ export default function Education() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-green backdrop-blur-sm"
             onClick={() => setPopup(null)}
           >
-            <motion.div
+            <m.div
               initial={{ scale: 0.9, opacity: 0, rotateX: 8 }}
               animate={{ scale: 1,   opacity: 1, rotateX: 0 }}
               exit={{    scale: 0.9, opacity: 0, rotateX: 8 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               className="
                 relative w-[340px] max-w-[92vw]
                 bg-[#f5f0e1] rounded-sm
@@ -349,8 +352,8 @@ export default function Education() {
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
 

@@ -1,14 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const BIRTH_DATE = new Date("2001-05-12");
 
 function getAge(birthDate: Date): number {
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+  const md = today.getMonth() - birthDate.getMonth();
+  if (md < 0 || (md === 0 && today.getDate() < birthDate.getDate())) age--;
   return age;
 }
 
@@ -37,8 +37,9 @@ const DETAILS = [
   { label: "Languages", value: "EN (Advanced) · ES (Basic)"   },
 ];
 
+const AGE = getAge(BIRTH_DATE);
+
 export default function About() {
-  const age = getAge(BIRTH_DATE);
 
   return (
     <section
@@ -54,7 +55,7 @@ export default function About() {
       <div className="sm:hidden w-full h-full flex flex-col px-5 pt-20 pb-6 gap-4">
 
         {/* Heading */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -67,10 +68,10 @@ export default function About() {
           <p className="mt-1 text-sm font-semibold text-accent border-b-2 border-primary pb-0.5 inline-block">
             Vitor K. Silveira
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Personal details — 2-column grid */}
-        <motion.ul
+        <m.ul
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -87,23 +88,23 @@ export default function About() {
               </span>
             </li>
           ))}
-        </motion.ul>
+        </m.ul>
 
         {/* Bio — 1 compact paragraph */}
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.18 }}
           className="shrink-0 text-accent/70 text-xs leading-relaxed"
         >
-          FullStack Developer with {age}+ years of experience building scalable
+          FullStack Developer with {AGE}+ years of experience building scalable
           products — from performant APIs to polished interfaces. Currently at
           GFT Consultoria working on Crefisa&apos;s platform.
-        </motion.p>
+        </m.p>
 
         {/* Skills */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -127,7 +128,7 @@ export default function About() {
               </span>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* ══════════════════════════════════════
@@ -138,7 +139,7 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
             {/* Left: heading + details */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
@@ -162,10 +163,10 @@ export default function About() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </m.div>
 
             {/* Right: bio + skills */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
@@ -175,7 +176,7 @@ export default function About() {
               <p className="text-accent/80 leading-relaxed text-base sm:text-lg">
                 I&apos;m a FullStack Developer based in São Paulo, passionate about
                 crafting solid and scalable products with great user experiences.
-                With {age} years of age and over 4 years of experience, I work
+                With {AGE} years of age and over 4 years of experience, I work
                 across the full stack — from performant APIs to polished interfaces.
                 <br /><br />
                 I believe in clean code, thoughtful architecture, and continuous
@@ -188,7 +189,7 @@ export default function About() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {SKILLS.map((skill, i) => (
-                    <motion.span
+                    <m.span
                       key={skill.label}
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -201,11 +202,11 @@ export default function About() {
                       }
                     >
                       {skill.label}
-                    </motion.span>
+                    </m.span>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
 
           </div>
         </div>
