@@ -23,7 +23,6 @@ const EDUCATION = [
 ];
 
 const CERTS = [
-  { title: "Systems Analysis and Development", issuer: "FIAP", year: "2024" },
   { title: "Machine Learning Foundations",     issuer: "FIAP", year: "2024" },
   { title: ".NET Core Development",            issuer: "FIAP", year: "2024" },
   { title: "Data Science Essentials",          issuer: "FIAP", year: "2024" },
@@ -32,55 +31,91 @@ const CERTS = [
 ];
 
 /* ─────────────────────────────────────────────────────────
-   Neural-net node positions (unit sphere coords).
-   Indices 0-5  →  certificate nodes (get label cards).
-   Indices 6-13 →  decorative nodes  (dots + edges only).
+   Neural-net layout — 2D positions (0-1 range) with subtle
+   per-node floating. No perspective / no zoom — static size.
 ──────────────────────────────────────────────────────────*/
-const ALL_NODES = [
-  /* cert nodes */
-  { x:  0.62, y: -0.28, z:  0.22 },
-  { x: -0.52, y:  0.38, z:  0.48 },
-  { x:  0.12, y:  0.68, z: -0.42 },
-  { x: -0.68, y: -0.22, z: -0.28 },
-  { x:  0.32, y: -0.58, z:  0.52 },
-  { x: -0.22, y:  0.18, z: -0.68 },
-  /* decorative nodes */
-  { x:  0.85, y:  0.10, z: -0.15 },
-  { x: -0.10, y: -0.75, z: -0.10 },
-  { x:  0.40, y:  0.55, z:  0.60 },
-  { x: -0.75, y:  0.22, z:  0.40 },
-  { x:  0.22, y:  0.14, z:  0.85 },
-  { x: -0.34, y: -0.50, z: -0.54 },
-  { x:  0.60, y:  0.50, z: -0.22 },
-  { x: -0.16, y: -0.30, z:  0.80 },
-];
-const CERT_COUNT = 6; // first N nodes are cert nodes
 
-const EDGES: [number, number][] = [
-  /* cert ring */
-  [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
-  /* cert diagonals */
-  [0,3],[1,4],[2,5],
-  /* certs → decorative */
-  [0,6],[0,10],[1,9],[1,8],[2,12],[3,11],[4,7],[4,13],[5,11],[5,9],
-  /* decorative web */
-  [6,12],[7,11],[8,9],[10,13],[6,10],[7,13],[8,13],[9,11],
-];
-
-/* ─── 3-D math ─────────────────────────────────────────── */
-type V3 = { x: number; y: number; z: number };
-
-function rotY(p: V3, a: number): V3 {
-  const c = Math.cos(a), s = Math.sin(a);
-  return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c };
+function seededRandom(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
 }
-function rotX(p: V3, a: number): V3 {
-  const c = Math.cos(a), s = Math.sin(a);
-  return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c };
+
+const rng = seededRandom(42);
+
+/* Certificate nodes — manually placed to spread nicely */
+const CERT_POSITIONS = [
+  { x: 0.22, y: 0.18 },  // top-left
+  { x: 0.48, y: 0.32 },  // center
+  { x: 0.72, y: 0.22 },  // top-right
+  { x: 0.18, y: 0.55 },  // left
+  { x: 0.68, y: 0.58 },  // right
+  { x: 0.42, y: 0.72 },  // bottom-center
+];
+const CERT_COUNT = CERT_POSITIONS.length;
+
+/* Decorative dot nodes — scattered around */
+const MOBILE_DECO_COUNT = 22;          // cleaner on small screens
+const DECO_POSITIONS: { x: number; y: number; size: number }[] = [];
+for (let i = 0; i < 55; i++) {
+  const x = 0.04 + rng() * 0.92;
+  const y = 0.04 + rng() * 0.92;
+  const size = rng() < 0.3 ? 4.5 : rng() < 0.6 ? 3 : 2;
+  DECO_POSITIONS.push({ x, y, size });
 }
-function proj(p: V3, fov: number, cx: number, cy: number, r: number) {
-  const sc = fov / (fov + p.z * r * 0.5);
-  return { px: cx + p.x * r * sc, py: cy + p.y * r * sc, sc };
+
+/* All node positions (cert first, then deco) */
+const ALL_X = [...CERT_POSITIONS.map(p => p.x), ...DECO_POSITIONS.map(p => p.x)];
+const ALL_Y = [...CERT_POSITIONS.map(p => p.y), ...DECO_POSITIONS.map(p => p.y)];
+const TOTAL = ALL_X.length;
+
+/* Build edges: connect nearby nodes */
+const EDGES: [number, number][] = [];
+for (let i = 0; i < TOTAL; i++) {
+  for (let j = i + 1; j < TOTAL; j++) {
+    const dx = ALL_X[i] - ALL_X[j];
+    const dy = ALL_Y[i] - ALL_Y[j];
+    const d = Math.sqrt(dx * dx + dy * dy);
+    if (d < 0.18) EDGES.push([i, j]);
+  }
+}
+/* Ensure cert nodes are connected to nearby dots */
+for (let c = 0; c < CERT_COUNT; c++) {
+  const myEdges = EDGES.filter(([a, b]) => a === c || b === c).length;
+  if (myEdges < 5) {
+    const dists = [];
+    for (let j = CERT_COUNT; j < TOTAL; j++) {
+      const dx = ALL_X[c] - ALL_X[j];
+      const dy = ALL_Y[c] - ALL_Y[j];
+      dists.push({ d: Math.sqrt(dx * dx + dy * dy), j });
+    }
+    dists.sort((a, b) => a.d - b.d);
+    for (let k = 0; k < 6; k++) {
+      const j = dists[k].j;
+      if (!EDGES.some(([a, b]) => (a === c && b === j) || (a === j && b === c))) {
+        EDGES.push([c, j]);
+      }
+    }
+  }
+}
+
+/* Per-node random phase offsets for floating animation */
+const PHASE_X: number[] = [];
+const PHASE_Y: number[] = [];
+const PHASE_FADE: number[] = [];
+const SPEED: number[] = [];
+const FADE_SPEED: number[] = [];
+/* Give each node a Z depth for 3D rotation */
+const NODE_Z: number[] = [];
+for (let i = 0; i < TOTAL; i++) {
+  PHASE_X.push(rng() * Math.PI * 2);
+  PHASE_Y.push(rng() * Math.PI * 2);
+  PHASE_FADE.push(rng() * Math.PI * 2);
+  SPEED.push(0.3 + rng() * 0.4);
+  FADE_SPEED.push(0.15 + rng() * 0.25);
+  NODE_Z.push((rng() - 0.5) * 0.6); // -0.3 to 0.3
 }
 
 /* ─── component ────────────────────────────────────────── */
@@ -96,7 +131,7 @@ export default function Education() {
     if (!ctx) return;
 
     const DPR = window.devicePixelRatio || 1;
-    let ry = 0, rx = 0.25, time = 0;
+    let time = 0;
     let rafId: number;
 
     const resize = () => {
@@ -112,77 +147,88 @@ export default function Education() {
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      ry   += 0.003;
-      rx   += 0.0009;
       time += 0.016;
 
-      const cx = w * 0.5;
-      const cy = h * 0.5;
-      const r  = Math.min(w, h) * 0.36;
-      const fov = 2.8;
+      const isMobile = w < 640;
+      const effectiveTotal = isMobile ? CERT_COUNT + MOBILE_DECO_COUNT : TOTAL;
 
-      /* project every node, with per-node floating oscillation */
-      const pts = ALL_NODES.map((n, i) => {
-        const floated: V3 = {
-          x: n.x + Math.sin(time * 0.30 + i * 1.20) * 0.055,
-          y: n.y + Math.cos(time * 0.22 + i * 0.85) * 0.055,
-          z: n.z + Math.sin(time * 0.18 + i * 1.50) * 0.055,
-        };
-        return proj(rotX(rotY(floated, ry), rx), fov, cx, cy, r);
+      /* Lissajous-style dual rotation — natural organic feel */
+      const rotY = time * 0.10;               // horizontal swing
+      const rotX = Math.sin(time * 0.07) * 0.35; // vertical rocks back & forth
+      const cosRY = Math.cos(rotY), sinRY = Math.sin(rotY);
+      const cosRX = Math.cos(rotX), sinRX = Math.sin(rotX);
+
+      /* Compute positions: 3D rotation + gentle float */
+      const drift = 12;
+      const px: number[] = [];
+      const py: number[] = [];
+      const pz: number[] = [];
+      for (let i = 0; i < effectiveTotal; i++) {
+        const bx = ALL_X[i] - 0.5;
+        const by = ALL_Y[i] - 0.5;
+        const bz = NODE_Z[i];
+
+        /* Rotate around Y axis (horizontal) */
+        let rx = bx * cosRY + bz * sinRY;
+        let ry = by;
+        let rz = -bx * sinRY + bz * cosRY;
+
+        /* Then rotate around X axis (vertical tilt) */
+        const ry2 = ry * cosRX - rz * sinRX;
+        const rz2 = ry * sinRX + rz * cosRX;
+
+        /* Subtle perspective */
+        const persp = 1 + rz2 * 0.15;
+
+        px.push(
+          (0.5 + rx * persp) * w
+          + Math.sin(time * SPEED[i] + PHASE_X[i]) * drift
+        );
+        py.push(
+          (0.5 + ry2 * persp) * h
+          + Math.cos(time * SPEED[i] + PHASE_Y[i]) * drift
+        );
+        pz.push(rz2);
+      }
+
+      /* Draw edges — alpha varies with depth */
+      EDGES.forEach(([a, b]) => {
+        if (a >= effectiveTotal || b >= effectiveTotal) return;
+        const avgZ = (pz[a] + pz[b]) / 2;
+        const alpha = 0.18 + avgZ * 0.15;
+        if (alpha <= 0.02) return;
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(210,205,190,${Math.min(0.35, Math.max(0.05, alpha))})`;
+        ctx.lineWidth = 0.9;
+        ctx.moveTo(px[a], py[a]);
+        ctx.lineTo(px[b], py[b]);
+        ctx.stroke();
       });
 
-      /* edges — painter's algorithm (far first) */
-      [...EDGES]
-        .sort((a, b) => {
-          const da = (pts[a[0]].sc + pts[a[1]].sc) / 2;
-          const db = (pts[b[0]].sc + pts[b[1]].sc) / 2;
-          return da - db;
-        })
-        .forEach(([a, b]) => {
-          const pa = pts[a], pb = pts[b];
-          const alpha = ((pa.sc + pb.sc) / 2 - 0.45) * 0.45;
-          ctx.beginPath();
-          ctx.strokeStyle = `rgba(46,139,87,${Math.max(0, alpha)})`;
-          ctx.lineWidth   = 0.7;
-          ctx.moveTo(pa.px, pa.py);
-          ctx.lineTo(pb.px, pb.py);
-          ctx.stroke();
-        });
+      /* Draw decorative dots — fade in/out */
+      for (let i = CERT_COUNT; i < effectiveTotal; i++) {
+        const decoIdx = i - CERT_COUNT;
+        const baseR = DECO_POSITIONS[decoIdx].size;
+        const fade = 0.5 + 0.5 * Math.sin(time * FADE_SPEED[i] + PHASE_FADE[i]);
+        const alpha = 0.08 + fade * 0.82;
+        if (alpha < 0.06) continue;
 
-      /* nodes */
-      pts.forEach(({ px, py, sc }, i) => {
-        const isCert = i < CERT_COUNT;
-        const dotR   = isCert ? 4 + sc * 2.5 : 2.5 + sc * 1.5;
-
-        /* glow */
-        const grd = ctx.createRadialGradient(px, py, 0, px, py, dotR * 3);
-        grd.addColorStop(0, `rgba(46,139,87,${sc * (isCert ? 0.55 : 0.3)})`);
-        grd.addColorStop(1, "transparent");
         ctx.beginPath();
-        ctx.arc(px, py, dotR * 3, 0, Math.PI * 2);
-        ctx.fillStyle = grd;
+        ctx.arc(px[i], py[i], baseR, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220,215,200,${alpha.toFixed(2)})`;
         ctx.fill();
+      }
 
-        /* solid dot */
-        ctx.beginPath();
-        ctx.arc(px, py, dotR, 0, Math.PI * 2);
-        ctx.fillStyle = isCert
-          ? `rgba(46,139,87,${0.6 + sc * 0.4})`
-          : `rgba(46,139,87,${0.25 + sc * 0.3})`;
-        ctx.fill();
-
-        /* update cert label DOM */
-        if (isCert) {
-          const el = labelRefs.current[i];
-          if (el) {
-            el.style.left      = px + "px";
-            el.style.top       = py + "px";
-            el.style.opacity   = (0.65 + sc * 0.35).toFixed(3);
-            el.style.transform = `translate(-50%,-50%) scale(${(0.72 + sc * 0.28).toFixed(3)})`;
-            el.style.zIndex    = String(Math.round(sc * 100));
-          }
+      /* Update cert label positions + subtle breathing scale */
+      for (let i = 0; i < CERT_COUNT; i++) {
+        const el = labelRefs.current[i];
+        if (el) {
+          el.style.left = px[i] + "px";
+          el.style.top  = py[i] + "px";
+          const scale = 1 + 0.08 * Math.sin(time * 0.4 + i * 1.2);
+          el.style.transform = `translate(-50%,-50%) scale(${scale.toFixed(3)})`;
         }
-      });
+      }
 
       rafId = requestAnimationFrame(tick);
     };
@@ -198,7 +244,7 @@ export default function Education() {
     <section
       data-section="cinq"
       aria-hidden="true"
-      className="home-section bg-accent"
+      className="home-section bg-[#022D20] font-serif italic"
     >
 
       {/* ── POPUP ─────────────────────────────────────── */}
@@ -210,37 +256,93 @@ export default function Education() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-green backdrop-blur-sm"
             onClick={() => setPopup(null)}
           >
             <motion.div
-              initial={{ scale: 0.85, opacity: 0, y: 12 }}
-              animate={{ scale: 1,    opacity: 1, y: 0  }}
-              exit={{    scale: 0.85, opacity: 0, y: 12  }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              initial={{ scale: 0.9, opacity: 0, rotateX: 8 }}
+              animate={{ scale: 1,   opacity: 1, rotateX: 0 }}
+              exit={{    scale: 0.9, opacity: 0, rotateX: 8 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               onClick={e => e.stopPropagation()}
-              className="bg-accent border border-primary/30 rounded-xl p-6 w-80 max-w-[90vw] shadow-2xl"
+              className="
+                relative w-[340px] max-w-[92vw]
+                bg-[#f5f0e1] rounded-sm
+                shadow-[0_12px_50px_rgba(0,0,0,0.5)]
+                not-italic
+              "
+              style={{ perspective: 800 }}
             >
-              <div className="flex items-center justify-between mb-5">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-                  Certificate
-                </span>
-                <button
-                  onClick={() => setPopup(null)}
-                  className="text-bg/30 hover:text-bg transition-colors text-lg leading-none"
-                >
-                  ✕
-                </button>
+              {/* parchment texture overlay */}
+              <div className="absolute inset-0 rounded-sm opacity-[0.04] pointer-events-none"
+                style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23n)'/%3E%3C/svg%3E\")" }}
+              />
+
+              {/* decorative double border */}
+              <div className="absolute inset-3 border border-[#c4a96a]/40 rounded-sm pointer-events-none" />
+              <div className="absolute inset-5 border border-[#c4a96a]/20 rounded-sm pointer-events-none" />
+
+              {/* corner ornaments */}
+              {[["top-6 left-6","rotate-0"],["top-6 right-6","rotate-90"],["bottom-6 left-6","-rotate-90"],["bottom-6 right-6","rotate-180"]].map(([pos, rot]) => (
+                <div key={pos} className={`absolute ${pos} ${rot} text-[#c4a96a]/30 text-lg leading-none pointer-events-none`}>
+                  ❧
+                </div>
+              ))}
+
+              {/* close button */}
+              <button
+                onClick={() => setPopup(null)}
+                className="absolute top-2 right-3 text-[#8b7d6b]/40 hover:text-[#8b7d6b]/80 transition-colors text-base leading-none z-10 font-sans"
+              >
+                ✕
+              </button>
+
+              {/* certificate content */}
+              <div className="relative px-10 py-10 flex flex-col items-center text-center">
+
+                {/* top flourish */}
+                <div className="text-[#c4a96a]/50 text-2xl mb-3 tracking-[0.3em]">⁕ ⁕ ⁕</div>
+
+                {/* header */}
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#8b7d6b]/60 font-sans mb-1">
+                  Certificate of Completion
+                </p>
+
+                {/* thin rule */}
+                <div className="w-16 h-px bg-[#c4a96a]/40 mb-5" />
+
+                {/* "this certifies" */}
+                <p className="text-[11px] text-[#8b7d6b]/50 font-sans mb-3">
+                  This is to certify the successful completion of
+                </p>
+
+                {/* title */}
+                <h3 className="font-bold text-[#2a2216] text-xl leading-snug mb-4 font-serif italic">
+                  {CERTS[popup].title}
+                </h3>
+
+                {/* thin rule */}
+                <div className="w-24 h-px bg-[#c4a96a]/30 mb-4" />
+
+                {/* issuer + year */}
+                <p className="text-[11px] text-[#8b7d6b]/50 font-sans mb-0.5">Awarded by</p>
+                <p className="text-sm font-bold text-[#2a2216]/80 font-sans tracking-wide">
+                  {CERTS[popup].issuer}
+                </p>
+                <p className="text-xs text-[#8b7d6b]/40 font-sans mt-1">
+                  {CERTS[popup].year}
+                </p>
+
+                {/* seal */}
+                <div className="mt-6 w-12 h-12 rounded-full border-2 border-[#c4a96a]/30 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border border-[#c4a96a]/20 flex items-center justify-center">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#c4a96a]/60">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                      <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-
-              <h3 className="font-sans font-extrabold text-bg text-lg leading-snug mb-2">
-                {CERTS[popup].title}
-              </h3>
-              <p className="text-bg/45 text-sm">
-                {CERTS[popup].issuer} · {CERTS[popup].year}
-              </p>
-
-              <div className="mt-5 h-[1px] w-12 bg-primary/50 rounded-full" />
             </motion.div>
           </motion.div>
         )}
@@ -257,7 +359,7 @@ export default function Education() {
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-bg/40 mb-1">
             Academic Background
           </p>
-          <h2 className="font-extrabold text-3xl sm:text-4xl text-bg leading-tight">
+          <h2 className="font-bold text-3xl sm:text-4xl text-bg leading-tight">
             Education
           </h2>
           <div className="mt-2 mb-6 w-10 h-[3px] bg-bg/30 rounded-full" />
@@ -283,7 +385,7 @@ export default function Education() {
                     {edu.relevant.map(tag => (
                       <span
                         key={tag}
-                        className="bg-primary/20 text-bg/70 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-primary/25"
+                        className="bg-primary/20 text-bg/70 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-primary/25 not-italic font-sans"
                       >
                         {tag}
                       </span>
@@ -321,16 +423,17 @@ export default function Education() {
                 style={{ left: 0, top: 0, transform: "translate(-50%,-50%)" }}
               >
                 <div className="
-                  bg-accent/90 border border-bg/10 rounded-lg
-                  px-2 py-1.5 w-[108px]
-                  hover:border-primary/50 hover:bg-accent
-                  transition-all duration-150 select-none
+                  bg-bg/10 backdrop-blur-md border border-bg/20
+                  rounded-lg px-2 py-1 whitespace-nowrap
+                  hover:bg-bg/20 hover:border-bg/35 hover:scale-105
+                  transition-all duration-200 select-none
+                  shadow-[0_2px_16px_rgba(0,0,0,0.25)]
                 ">
-                  <p className="text-[8px] text-bg/40 font-bold uppercase tracking-wider leading-none mb-0.5">
-                    {cert.issuer} · {cert.year}
+                  <p className="text-[10px] text-bg/50 leading-none not-italic font-sans mb-0.5">
+                    {cert.issuer}
                   </p>
-                  <p className="text-[9px] text-bg/75 leading-tight font-medium line-clamp-2">
-                    {cert.title}
+                  <p className="text-[11px] text-bg font-semibold leading-tight not-italic font-sans">
+                    {cert.title.length > 22 ? cert.title.slice(0, 20) + "…" : cert.title}
                   </p>
                 </div>
               </div>

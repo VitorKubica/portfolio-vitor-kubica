@@ -7,30 +7,21 @@ export default function Hero() {
     <section
       data-section="une"
       aria-hidden="false"
-      className="home-section flex-col bg-[linear-gradient(135deg,_#044d35_0%,_#033d2a_100%)]"
+      className="home-section flex-col bg-bg overflow-hidden"
     >
-      {/* Desktop video (hidden on mobile) */}
-      <video
-        src="/videos/hero-desktop.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="hidden md:block absolute inset-0 w-full h-full object-cover"
+      {/* Background images: raw img to preserve full quality */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/bg_desktop_1.png"
+        alt=""
+        className="hidden sm:block absolute inset-0 w-full h-full object-cover"
       />
-
-      {/* Mobile video (hidden on desktop) */}
-      <video
-        src="/videos/hero-mobile.mp4"
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="block md:hidden absolute inset-0 w-full h-full object-cover"
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/bg_mobili.png"
+        alt=""
+        className="sm:hidden absolute inset-0 w-full h-full object-cover object-bottom"
       />
-
-      {/* Dark green overlay */}
-      <div className="absolute inset-0 bg-primary/85" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1 w-full px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40">
@@ -77,7 +68,7 @@ export default function Hero() {
 
       {/* Bottom highlights */}
       <motion.div
-        className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-8 lg:pb-14 mt-auto"
+        className="hidden sm:flex relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-8 lg:pb-14 mt-auto"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
