@@ -12,13 +12,13 @@ export default function Hero() {
       {/* Background images: raw img to preserve full quality */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/bg_desktop_1.png"
+        src="/images/bg_desktop.png"
         alt=""
         className="hidden sm:block absolute inset-0 w-full h-full object-cover"
       />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/images/bg_mobili.png"
+        src="/images/bg_mobile.png"
         alt=""
         className="sm:hidden absolute inset-0 w-full h-full object-cover object-bottom"
       />
