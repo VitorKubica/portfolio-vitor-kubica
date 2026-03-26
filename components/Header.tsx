@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useSectionContext } from "./SectionContext";
 
 const SOCIAL_LINKS = {
   github: "https://github.com/vitorkubica",
   linkedin: "https://linkedin.com/in/vitorkubica",
-  twitter: "https://twitter.com/vitorkubica",
 };
 
 export default function Header() {
@@ -14,6 +15,8 @@ export default function Header() {
   const [compact, setCompact] = useState(false);
   const [logoVisible, setLogoVisible] = useState(false);
   const { currentSection } = useSectionContext();
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
@@ -74,25 +77,46 @@ export default function Header() {
     currentSection === "une" ||
     currentSection === "trois" ||
     currentSection === "footer";
+  const isHero = currentSection === "une";
 
   return (
     <header className="fixed top-0 left-0 w-full z-[1000] flex items-center justify-between px-6 sm:px-10 lg:px-16 py-6 lg:py-8 bg-transparent">
-      {/* Logo */}
-      <a
-        id="logo"
-        href="/"
-        aria-label="Logo, go to homepage."
-        className={`relative z-[999] flex flex-col transition-all duration-500 ${menuOpen ? "max-sm:!text-accent" : ""} ${logoOnDark ? "text-bg" : "text-accent"} ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
-      >
-        <span
-          className={`block font-serif text-3xl sm:text-4xl font-bold italic tracking-tight transition-transform duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
+      {/* Logo / Back */}
+      {isHome ? (
+        <a
+          id="logo"
+          href="/"
+          aria-label="Logo, go to homepage."
+          className={`relative z-[999] flex flex-col transition-all duration-500 ${menuOpen ? "max-sm:!text-accent" : ""} ${logoOnDark ? "text-bg" : "text-accent"} ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
         >
-          VK
-        </span>
-        <span className="hidden lg:block uppercase tracking-widest text-[10px] font-sans not-italic mt-0.5 opacity-70">
-          Vitor K. Silveira
-        </span>
-      </a>
+          <span
+            className={`flex text-3xl sm:text-4xl tracking-tight transition-all duration-500 ${compact ? "lg:-translate-x-4 opacity-80" : ""}`}
+            style={{ fontFamily: "var(--font-fluid)" }}
+          >
+            V
+            <span
+              className="inline-block overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+              style={{
+                maxWidth: isHero ? "4ch" : "0ch",
+                opacity: isHero ? 1 : 0,
+              }}
+            >
+              itor
+            </span>
+            K
+          </span>
+        </a>
+      ) : (
+        <Link
+          href="/"
+          className={`relative z-[999] inline-flex items-center gap-2 text-accent transition-all duration-500 ${logoVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          <span className="text-sm font-medium">Back</span>
+        </Link>
+      )}
 
       {/* Hamburger */}
       <button
@@ -102,7 +126,7 @@ export default function Header() {
         aria-expanded={menuOpen}
         onClick={toggleMenu}
         className={`menu-toggle z-[999] relative flex flex-col justify-center items-end w-10 h-8 bg-transparent cursor-pointer transition-all duration-300 ${
-          menuOpen ? "text-accent" : currentSection === "une" ? "text-bg sm:text-accent" : logoOnDark ? "text-bg" : "text-accent"
+          menuOpen ? "text-accent" : !isHome ? "text-accent" : currentSection === "une" ? "text-bg sm:text-accent" : logoOnDark ? "text-bg" : "text-accent"
         } ${menuOpen ? "x scale-90" : ""}`}
       >
         <span
@@ -130,15 +154,39 @@ export default function Header() {
           className={`list-none p-0 m-0 space-y-2 text-lg lg:text-base font-medium transition-all duration-300 ${menuOpen ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:translate-y-8"}`}
           style={{ transitionDelay: "100ms" }}
         >
-          {["My Work", "My Shelf", "Contact"].map((item) => (
-            <li key={item}>
-              <a
-                href={`#${item.toLowerCase().replace(" ", "-")}`}
-                className="text-accent hover:text-link transition-colors"
-                onClick={closeMenu}
-              >
-                {item}
-              </a>
+          {([
+            { label: "My Work", section: "deux", href: "/mywork" },
+            { label: "About Me", section: "quatre", href: null },
+            { label: "Contact", section: "six", href: null },
+          ] as const).map((item) => (
+            <li key={item.label}>
+              {isHome ? (
+                <button
+                  type="button"
+                  className="text-accent hover:text-link transition-colors bg-transparent cursor-pointer"
+                  onClick={() => {
+                    closeMenu();
+                    const el = document.querySelector(`[data-section='${item.section}']`) as HTMLElement | null;
+                    if (!el) return;
+                    const main = document.querySelector("main");
+                    if (main && window.innerWidth >= 1024) {
+                      main.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+                    } else {
+                      el.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link
+                  href={item.href ?? `/#${item.section}`}
+                  className="text-accent hover:text-link transition-colors"
+                  onClick={closeMenu}
+                >
+                  {item.label}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -151,11 +199,11 @@ export default function Header() {
             Say Hello
           </span>
           <a
-            href="mailto:hello@vitorkubica.dev"
+            href="mailto:vitor05kubica12@gmail.com"
             className={`text-link text-base hover:opacity-70 transition-all duration-300 ${menuOpen ? "opacity-100 translate-y-0" : "lg:opacity-0 lg:translate-y-6"}`}
             style={{ transitionDelay: "300ms" }}
           >
-            hello@vitorkubica.dev
+            vitor05kubica12@gmail.com
           </a>
         </div>
 
@@ -167,7 +215,6 @@ export default function Header() {
             [
               ["GH", SOCIAL_LINKS.github],
               ["LN", SOCIAL_LINKS.linkedin],
-              ["TW", SOCIAL_LINKS.twitter],
             ] as const
           ).map(([label, href]) => (
             <li key={label}>

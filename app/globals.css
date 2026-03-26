@@ -20,6 +20,9 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+html:has([data-page="home"]) {
   overflow: hidden;
 }
 
@@ -38,7 +41,7 @@ body {
   color: var(--background);
 }
 
-main {
+main[data-page="home"] {
   scroll-snap-type: y mandatory;
   overflow-y: auto;
   height: 100dvh;

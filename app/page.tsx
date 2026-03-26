@@ -10,7 +10,7 @@ const Footer = dynamic(() => import("@/components/sections/Footer"));
 
 export default function Home() {
   return (
-    <main>
+    <main data-page="home">
       <Hero />
       <Projects />
       <Experience />

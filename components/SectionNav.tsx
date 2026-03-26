@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useSectionContext } from "./SectionContext";
 
 const SECTIONS = [
@@ -13,6 +14,7 @@ const SECTIONS = [
 
 export default function SectionNav() {
   const { currentSection } = useSectionContext();
+  const pathname = usePathname();
 
   function handleClick(sectionId: string) {
     const el = document.querySelector(
@@ -27,6 +29,7 @@ export default function SectionNav() {
     }
   }
 
+  if (pathname !== "/") return null;
   if (currentSection === "footer") return null;
 
   return (

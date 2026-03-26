@@ -37,16 +37,29 @@ export default function Footer() {
           </div>
 
           <ul className="list-none p-0 m-0 text-base sm:text-lg leading-relaxed space-y-1">
-            <li>
-              <a href="#deux" className="text-bg/80 hover:text-bg transition-colors">
-                My Work
-              </a>
-            </li>
-            <li>
-              <a href="#quatre" className="text-bg/80 hover:text-bg transition-colors">
-                About
-              </a>
-            </li>
+            {([
+              { label: "My Work", section: "deux" },
+              { label: "About", section: "quatre" },
+            ] as const).map((item) => (
+              <li key={item.label}>
+                <button
+                  type="button"
+                  className="text-bg/80 hover:text-bg transition-colors bg-transparent cursor-pointer"
+                  onClick={() => {
+                    const el = document.querySelector(`[data-section='${item.section}']`) as HTMLElement | null;
+                    if (!el) return;
+                    const main = document.querySelector("main");
+                    if (main && window.innerWidth >= 1024) {
+                      main.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+                    } else {
+                      el.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                >
+                  {item.label}
+                </button>
+              </li>
+            ))}
           </ul>
         </m.div>
 

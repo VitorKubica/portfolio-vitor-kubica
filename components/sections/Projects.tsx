@@ -1,88 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { m, AnimatePresence } from "framer-motion";
 import ProjectsBackground from "./ProjectsBackground";
-
-type Project = {
-  id: string;
-  category: string;
-  title: string;
-  short: string;
-  description: string;
-  tech: string[];
-  github: string;
-  color: string;
-};
-
-const PROJECTS: Project[] = [
-  {
-    id: "mockzada-backend",
-    category: "Backend",
-    title: "Mockzada Backend",
-    short: "Mock server for API testing and development.",
-    description:
-      "A powerful backend mock server that enables teams to simulate API responses during development and testing. Built for speed and flexibility.",
-    tech: ["Node.js", "TypeScript", "REST"],
-    github: "https://github.com/vitorkubica/mockzada_backend",
-    color: "green",
-  },
-  {
-    id: "biblioteca-api",
-    category: "Backend",
-    title: "Biblioteca API",
-    short: "RESTful API for library management system.",
-    description:
-      "A complete REST API for managing a digital library — books, authors, categories and loans. Clean architecture with full CRUD operations.",
-    tech: ["Node.js", "TypeScript", "SQL"],
-    github: "https://github.com/vitorkubica/biblioteca_api",
-    color: "green",
-  },
-  {
-    id: "hash-for-carbon",
-    category: "Frontend",
-    title: "Hash for Carbon",
-    short: "Landing page for a carbon-neutral startup.",
-    description:
-      "Developed the startup's Landing Page using Next.js, TypeScript, and Tailwind with a Mobile-First approach, providing an enhanced user experience with REST API integration.",
-    tech: ["Next.js", "TypeScript", "Tailwind"],
-    github: "https://github.com/vitorkubica/hash_for_carbon",
-    color: "green",
-  },
-  {
-    id: "avantti-pisos",
-    category: "Frontend",
-    title: "Avantti Pisos",
-    short: "Website for a flooring and tile company.",
-    description:
-      "Full website and landing page for Avantti Pisos e Revestimentos, with a comprehensive view of the company's processes and digital strategy.",
-    tech: ["JavaScript", "CSS", "Node.js"],
-    github: "https://github.com/vitorkubica/avantti_pisos",
-    color: "green",
-  },
-  {
-    id: "anallizer-ai",
-    category: "AI / Automation",
-    title: "Anallizer AI",
-    short: "AI-powered data analysis tool.",
-    description:
-      "An intelligent analysis tool leveraging AI to process and interpret data, providing actionable insights. Combines machine learning with intuitive visualizations.",
-    tech: ["Python", "AI/ML", "Data Science"],
-    github: "https://github.com/vitorkubica/anallizer_AI",
-    color: "green",
-  },
-  {
-    id: "n8n-workflows",
-    category: "AI / Automation",
-    title: "n8n Workflows",
-    short: "Automation workflows with n8n.",
-    description:
-      "A collection of powerful automation workflows built with n8n, streamlining repetitive tasks and integrating multiple services for improved productivity.",
-    tech: ["n8n", "Python", "Automation"],
-    github: "https://github.com/vitorkubica/n8n_workflows",
-    color: "green",
-  },
-];
+import { PROJECTS, type Project } from "@/data/projects";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -131,50 +53,65 @@ function CollapsedCard({ project, index, onClick }: { project: Project; index: n
   );
 }
 
-/* ─── Desktop: expanded card (inline, full row) ─── */
-function ExpandedCard({ project, onClose }: { project: Project; onClose: () => void }) {
+/* ─── Desktop: popup overlay ─── */
+function DesktopPopup({ project, onClose }: { project: Project; onClose: () => void }) {
   return (
-    <m.div
-      key={project.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 10 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="col-span-1 sm:col-span-2 lg:col-span-3 bg-white border-2 border-primary rounded-[4px] p-6 sm:p-8 relative"
-    >
-      <button
+    <>
+      {/* Backdrop */}
+      <m.div
+        key="desktop-backdrop"
+        className="fixed inset-0 z-40 bg-accent/60 hidden sm:block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
         onClick={onClose}
-        aria-label="Close project details"
-        className="absolute top-4 right-4 text-2xl text-accent/50 hover:text-accent cursor-pointer leading-none transition-colors w-8 h-8 flex items-center justify-center"
+      />
+      {/* Popup card */}
+      <m.div
+        key={project.id}
+        initial={{ opacity: 0, scale: 0.95, y: 24 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 16 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="fixed z-50 inset-0 hidden sm:flex items-center justify-center pointer-events-none"
       >
-        ×
-      </button>
-      <span className="inline-block text-primary bg-primary/10 px-2 py-0.5 rounded text-[11px] uppercase tracking-wide font-semibold mb-3">
-        {project.category}
-      </span>
-      <h3 className="font-sans font-extrabold text-2xl sm:text-3xl text-accent leading-tight mb-4 pr-8">
-        {project.title}
-      </h3>
-      <p className="text-accent/75 text-base sm:text-lg leading-relaxed mb-6 max-w-2xl">
-        {project.description}
-      </p>
-      <div className="flex flex-wrap gap-2 mb-6">
-        {project.tech.map((tag) => (
-          <span key={tag} className="text-sm px-3 py-1 rounded border border-primary/30 text-primary font-semibold bg-primary/5">
-            {tag}
+        <div className="bg-white rounded-lg shadow-2xl p-8 lg:p-10 relative w-full max-w-lg pointer-events-auto">
+          <button
+            onClick={onClose}
+            aria-label="Close project details"
+            className="absolute top-4 right-4 text-2xl text-accent/50 hover:text-accent cursor-pointer leading-none transition-colors w-8 h-8 flex items-center justify-center"
+          >
+            ×
+          </button>
+          <span className="inline-block text-primary bg-primary/10 px-2 py-0.5 rounded text-[11px] uppercase tracking-wide font-semibold mb-3">
+            {project.category}
           </span>
-        ))}
-      </div>
-      <a
-        href={project.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-[4px] text-sm font-semibold hover:bg-primary transition-colors duration-200"
-      >
-        <GithubIcon className="w-4 h-4" />
-        View on GitHub
-      </a>
-    </m.div>
+          <h3 className="font-sans font-extrabold text-2xl sm:text-3xl text-accent leading-tight mb-4 pr-8">
+            {project.title}
+          </h3>
+          <p className="text-accent/75 text-base sm:text-lg leading-relaxed mb-6">
+            {project.description}
+          </p>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {project.tech.map((tag) => (
+              <span key={tag} className="text-sm px-3 py-1 rounded border border-primary/30 text-primary font-semibold bg-primary/5">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-accent text-bg px-5 py-2.5 rounded-[4px] text-sm font-semibold hover:bg-primary transition-colors duration-200"
+          >
+            <GithubIcon className="w-4 h-4" />
+            View on GitHub
+          </a>
+        </div>
+      </m.div>
+    </>
   );
 }
 
@@ -277,8 +214,8 @@ export default function Projects() {
         </m.h2>
 
         {/* 2 cols × 3 rows, fills remaining height */}
-        <div className="grid grid-cols-2 grid-rows-3 gap-2 flex-1 min-h-0">
-          {PROJECTS.map((project, i) => (
+        <div className="grid grid-cols-2 grid-rows-[1fr_1fr_1fr_auto] gap-2 flex-1 min-h-0">
+          {PROJECTS.slice(0, 6).map((project, i) => (
             <m.button
               key={project.id}
               initial={{ opacity: 0, y: 20 }}
@@ -303,14 +240,32 @@ export default function Projects() {
               </div>
             </m.button>
           ))}
+          <Link
+            href="/mywork"
+            className="col-span-2 flex items-center justify-center text-sm font-semibold text-primary hover:text-accent transition-colors py-2"
+          >
+            See all projects &rarr;
+          </Link>
         </div>
       </div>
 
       {/* ════════════════════════════════════════
           DESKTOP layout (hidden on mobile)
-          Inline expansion within grid
+          Static grid — click opens popup overlay
       ════════════════════════════════════════ */}
-      <div className="hidden sm:flex relative z-10 w-full h-full overflow-y-auto flex-col lg:justify-center">
+
+      {/* Desktop popup */}
+      <AnimatePresence>
+        {expanded && expandedProject && (
+          <DesktopPopup
+            key={`desktop-popup-${expanded}`}
+            project={expandedProject}
+            onClose={close}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="hidden sm:flex relative z-10 w-full h-full flex-col lg:justify-center">
         <div className="w-full flex flex-col px-10 lg:px-16 max-w-6xl mx-auto py-20">
           <m.h2
             initial={{ opacity: 0, y: 20 }}
@@ -323,35 +278,30 @@ export default function Projects() {
           </m.h2>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            <AnimatePresence mode="popLayout">
-              {expanded ? (
-                <>
-                  <ExpandedCard
-                    key={`expanded-${expanded}`}
-                    project={PROJECTS.find((p) => p.id === expanded)!}
-                    onClose={close}
-                  />
-                  {PROJECTS.filter((p) => p.id !== expanded).map((project, i) => (
-                    <CollapsedCard
-                      key={project.id}
-                      project={project}
-                      index={i}
-                      onClick={() => setExpanded((prev) => (prev === project.id ? null : project.id))}
-                    />
-                  ))}
-                </>
-              ) : (
-                PROJECTS.map((project, i) => (
-                  <CollapsedCard
-                    key={project.id}
-                    project={project}
-                    index={i}
-                    onClick={() => setExpanded(project.id)}
-                  />
-                ))
-              )}
-            </AnimatePresence>
+            {PROJECTS.slice(0, 6).map((project, i) => (
+              <CollapsedCard
+                key={project.id}
+                project={project}
+                index={i}
+                onClick={() => setExpanded(project.id)}
+              />
+            ))}
           </div>
+
+          <m.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="mt-8 text-center"
+          >
+            <Link
+              href="/mywork"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-accent transition-colors"
+            >
+              See all projects &rarr;
+            </Link>
+          </m.div>
         </div>
       </div>
 

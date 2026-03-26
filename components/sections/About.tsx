@@ -2,7 +2,7 @@
 
 import { m } from "framer-motion";
 
-const BIRTH_DATE = new Date("2001-05-12");
+const BIRTH_DATE = new Date("2004-05-12");
 
 function getAge(birthDate: Date): number {
   const today = new Date();

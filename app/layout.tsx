@@ -16,6 +16,12 @@ const geistSans = localFont({
   display: "swap",
 });
 
+const fluid = localFont({
+  src: "./fonts/fluid.ttf",
+  variable: "--font-fluid",
+  display: "swap",
+});
+
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["700", "800"],
@@ -78,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${playfair.variable} antialiased`}
+      className={`${geistSans.variable} ${playfair.variable} ${fluid.variable} antialiased`}
     >
       <body className="min-h-dvh bg-bg text-accent">
         <MotionProvider>
