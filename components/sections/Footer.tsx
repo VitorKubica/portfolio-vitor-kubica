@@ -1,7 +1,10 @@
+"use client";
+
+import { m } from "framer-motion";
+
 const SOCIAL_LINKS = [
   { label: "GH", href: "https://github.com/vitorkubica", ariaLabel: "Vitor on GitHub" },
   { label: "LN", href: "https://linkedin.com/in/vitorkubica", ariaLabel: "Vitor on LinkedIn" },
-  { label: "TW", href: "https://twitter.com/vitorkubica", ariaLabel: "Vitor on Twitter" },
 ];
 
 export default function Footer() {
@@ -13,37 +16,62 @@ export default function Footer() {
     >
       <div className="w-full flex flex-col px-6 sm:px-10 lg:px-16 py-16 lg:py-20 max-w-6xl mx-auto">
         {/* Footer main */}
-        <div className="footer-main w-full flex flex-col sm:flex-row gap-10 sm:gap-20 mb-14">
+        <m.div
+          className="footer-main w-full flex flex-col sm:flex-row gap-10 sm:gap-20 mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <div>
             <span className="block uppercase text-xs tracking-[0.25em] text-bg/40 mb-2">
               Say Hello
             </span>
             <ul className="list-none p-0 m-0 text-base sm:text-lg leading-relaxed">
               <li>
-                <a href="mailto:hello@vitorkubica.dev" className="text-bg/80 hover:text-bg transition-colors">
-                  hello@vitorkubica.dev
+                <a href="mailto:vitor05kubica12@gmail.com" className="text-bg/80 hover:text-bg transition-colors">
+                  vitor05kubica12@gmail.com
                 </a>
               </li>
             </ul>
           </div>
 
           <ul className="list-none p-0 m-0 text-base sm:text-lg leading-relaxed space-y-1">
-            <li>
-              <a href="#work" className="text-bg/80 hover:text-bg transition-colors">
-                My Work
-              </a>
-            </li>
-            <li>
-              <a href="#articles" className="text-bg/80 hover:text-bg transition-colors">
-                My Shelf
-              </a>
-            </li>
+            {([
+              { label: "My Work", section: "deux" },
+              { label: "About", section: "quatre" },
+            ] as const).map((item) => (
+              <li key={item.label}>
+                <button
+                  type="button"
+                  className="text-bg/80 hover:text-bg transition-colors bg-transparent cursor-pointer"
+                  onClick={() => {
+                    const el = document.querySelector(`[data-section='${item.section}']`) as HTMLElement | null;
+                    if (!el) return;
+                    const main = document.querySelector("main");
+                    if (main && window.innerWidth >= 1024) {
+                      main.scrollTo({ top: el.offsetTop, behavior: "smooth" });
+                    } else {
+                      el.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }}
+                >
+                  {item.label}
+                </button>
+              </li>
+            ))}
           </ul>
-        </div>
+        </m.div>
 
         {/* Footer bottom */}
-        <div className="footer-bottom w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-8 text-sm sm:text-base border-t border-bg/15">
-          <span className="text-bg/50">&copy; Vitor Kubica {new Date().getFullYear()}</span>
+        <m.div
+          className="footer-bottom w-full flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-8 text-sm sm:text-base border-t border-bg/15"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <span className="text-bg/50">&copy; {new Date().getFullYear()} Vitor K. Silveira</span>
 
           <ul className="list-none p-0 m-0 flex gap-6">
             {SOCIAL_LINKS.map((link) => (
@@ -60,7 +88,7 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </m.div>
       </div>
     </footer>
   );

@@ -1,17 +1,20 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useSectionContext } from "./SectionContext";
 
 const SECTIONS = [
   { id: "une", label: "Go to first section. Hero." },
-  { id: "deux", label: "Go to second section. Skills." },
+  { id: "deux", label: "Go to second section. Projects." },
   { id: "trois", label: "Go to third section. Experience." },
-  { id: "quatre", label: "Go to fourth section. Showcase." },
-  { id: "cinq", label: "Go to fifth section. Contact." },
+  { id: "quatre", label: "Go to fourth section. About." },
+  { id: "cinq", label: "Go to fifth section. Education." },
+  { id: "six", label: "Go to sixth section. Contact." },
 ];
 
 export default function SectionNav() {
   const { currentSection } = useSectionContext();
+  const pathname = usePathname();
 
   function handleClick(sectionId: string) {
     const el = document.querySelector(
@@ -26,6 +29,7 @@ export default function SectionNav() {
     }
   }
 
+  if (pathname !== "/") return null;
   if (currentSection === "footer") return null;
 
   return (
