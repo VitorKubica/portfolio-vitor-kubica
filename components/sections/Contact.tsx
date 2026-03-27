@@ -1,10 +1,42 @@
 "use client";
 
+import { useState } from "react";
 import Cavalier from "../ui/Cavalier";
 import Button from "../ui/Button";
 import InputGroup from "../ui/InputGroup";
 
+type Status = "idle" | "sending" | "success" | "error";
+
 export default function Contact() {
+  const [status, setStatus] = useState<Status>("idle");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      email: (form.elements.namedItem("_replyto") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+    };
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+
   return (
     <section
       id="contact"
@@ -26,8 +58,7 @@ export default function Contact() {
         />
 
         <form
-          action="https://formspree.io/f/yourformid"
-          method="POST"
+          onSubmit={handleSubmit}
           className="flex flex-col w-full max-w-lg"
         >
           <div className="flex flex-col sm:flex-row gap-5 sm:gap-5 mb-5 sm:mb-8">
@@ -60,8 +91,24 @@ export default function Contact() {
             />
           </div>
 
-          <Button type="submit" variant="primary" className="self-start sm:self-center mt-4">
-            Shoot
+          {status === "success" && (
+            <p className="mb-4 text-sm text-primary font-medium">
+              Message sent! I&apos;ll get back to you soon.
+            </p>
+          )}
+          {status === "error" && (
+            <p className="mb-4 text-sm text-red-600 font-medium">
+              Something went wrong. Please try again.
+            </p>
+          )}
+
+          <Button
+            type="submit"
+            variant="primary"
+            className="self-start sm:self-center mt-4"
+            disabled={status === "sending"}
+          >
+            {status === "sending" ? "Sending…" : "Shoot"}
           </Button>
         </form>
       </div>
