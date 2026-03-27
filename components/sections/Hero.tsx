@@ -15,11 +15,21 @@ export default function Hero() {
         <img
           src="/images/bg_mobile.webp"
           alt=""
-          className="w-full h-full object-cover object-bottom sm:object-center"
+          className="w-full h-full object-cover [object-position:50%_88%] sm:object-center"
           fetchPriority="high"
           decoding="async"
         />
       </picture>
+
+      {/* Mobile gradient overlay — deepens top area for text legibility */}
+      <div
+        className="absolute inset-0 sm:hidden"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(4,77,53,0.55) 0%, rgba(4,77,53,0.15) 45%, transparent 70%)",
+        }}
+        aria-hidden="true"
+      />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1 w-full px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 lg:pt-40">
