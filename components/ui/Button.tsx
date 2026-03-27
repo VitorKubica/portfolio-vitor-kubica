@@ -8,6 +8,7 @@ type ButtonProps = {
   variant?: "primary" | "secondary";
   noArrow?: boolean;
   className?: string;
+  disabled?: boolean;
 };
 
 export default function Button({
@@ -17,6 +18,7 @@ export default function Button({
   variant = "secondary",
   noArrow = false,
   className = "",
+  disabled = false,
 }: ButtonProps) {
   const isPrimary = variant === "primary";
 
@@ -50,7 +52,7 @@ export default function Button({
   }
 
   return (
-    <button type={type} className={base}>
+    <button type={type} className={base} disabled={disabled}>
       {inner}
     </button>
   );
