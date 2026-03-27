@@ -377,13 +377,13 @@ export default function Education() {
           >
             Education
           </h2>
-          <div className="mt-2 mb-6 w-10 h-[3px] bg-bg/30 rounded-full" />
+          <div className="mt-1.5 mb-4 w-10 h-[3px] bg-bg/30 rounded-full" />
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {EDUCATION.map(edu => (
               <article
                 key={`${edu.institution}-${edu.degree}`}
-                className="bg-bg/[0.05] border border-bg/10 rounded-lg p-4 flex flex-col gap-1.5"
+                className="bg-bg/[0.05] border border-bg/10 rounded-lg px-3 py-2.5 flex flex-col gap-1"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-bold text-bg/70 text-xs uppercase tracking-wide">
@@ -391,22 +391,10 @@ export default function Education() {
                   </span>
                   <span className="text-bg/25 text-xs">{edu.location}</span>
                 </div>
-                <h3 className="font-extrabold text-bg text-base leading-snug">
+                <h3 className="font-extrabold text-bg text-sm leading-snug">
                   {edu.degree}
                 </h3>
                 <p className="text-bg/35 text-xs">{edu.period}</p>
-                {edu.relevant.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {edu.relevant.map(tag => (
-                      <span
-                        key={tag}
-                        className="bg-primary/20 text-bg/70 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-primary/25 not-italic font-sans"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </article>
             ))}
           </div>
