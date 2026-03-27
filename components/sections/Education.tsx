@@ -169,7 +169,7 @@ export default function Education() {
       const cosRX = Math.cos(rotX), sinRX = Math.sin(rotX);
 
       /* Compute positions: 3D rotation + gentle float */
-      const drift = 12;
+      const drift = isMobile ? 5 : 12;
       const px: number[] = [];
       const py: number[] = [];
       for (let i = 0; i < effectiveTotal; i++) {
@@ -227,8 +227,11 @@ export default function Education() {
       for (let i = 0; i < CERT_COUNT; i++) {
         const el = labelRefs.current[i];
         if (el) {
-          el.style.left = px[i] + "px";
-          el.style.top  = py[i] + "px";
+          const hw         = (el.offsetWidth  || 160) * 0.5 + 4;
+          const hh         = (el.offsetHeight || 32)  * 0.5 + 4;
+          const bottomPad  = isMobile ? 48 : 16;
+          el.style.left = Math.max(hw,       Math.min(w - hw,            px[i])) + "px";
+          el.style.top  = Math.max(hh + 8,   Math.min(h - hh - bottomPad, py[i])) + "px";
           const scale = 1 + 0.08 * Math.sin(time * 0.4 + i * 1.2);
           el.style.transform = `translate(-50%,-50%) scale(${scale.toFixed(3)})`;
         }
@@ -374,13 +377,13 @@ export default function Education() {
           >
             Education
           </h2>
-          <div className="mt-2 mb-6 w-10 h-[3px] bg-bg/30 rounded-full" />
+          <div className="mt-1.5 mb-4 w-10 h-[3px] bg-bg/30 rounded-full" />
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {EDUCATION.map(edu => (
               <article
                 key={`${edu.institution}-${edu.degree}`}
-                className="bg-bg/[0.05] border border-bg/10 rounded-lg p-4 flex flex-col gap-1.5"
+                className="bg-bg/[0.05] border border-bg/10 rounded-lg px-3 py-2.5 flex flex-col gap-1"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-bold text-bg/70 text-xs uppercase tracking-wide">
@@ -388,22 +391,10 @@ export default function Education() {
                   </span>
                   <span className="text-bg/25 text-xs">{edu.location}</span>
                 </div>
-                <h3 className="font-extrabold text-bg text-base leading-snug">
+                <h3 className="font-extrabold text-bg text-sm leading-snug">
                   {edu.degree}
                 </h3>
                 <p className="text-bg/35 text-xs">{edu.period}</p>
-                {edu.relevant.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {edu.relevant.map(tag => (
-                      <span
-                        key={tag}
-                        className="bg-primary/20 text-bg/70 text-[10px] font-semibold px-2 py-0.5 rounded-full border border-primary/25 not-italic font-sans"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </article>
             ))}
           </div>
@@ -426,7 +417,7 @@ export default function Education() {
           </div>
 
           {/* canvas + label overlays */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 overflow-hidden">
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
             {CERTS.map((cert, i) => (
