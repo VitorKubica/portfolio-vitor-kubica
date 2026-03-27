@@ -169,7 +169,7 @@ export default function Education() {
       const cosRX = Math.cos(rotX), sinRX = Math.sin(rotX);
 
       /* Compute positions: 3D rotation + gentle float */
-      const drift = 12;
+      const drift = isMobile ? 5 : 12;
       const px: number[] = [];
       const py: number[] = [];
       for (let i = 0; i < effectiveTotal; i++) {
@@ -227,8 +227,8 @@ export default function Education() {
       for (let i = 0; i < CERT_COUNT; i++) {
         const el = labelRefs.current[i];
         if (el) {
-          const hw = el.offsetWidth  * 0.5 + 4;
-          const hh = el.offsetHeight * 0.5 + 4;
+          const hw = (el.offsetWidth  || 160) * 0.5 + 4;
+          const hh = (el.offsetHeight || 32)  * 0.5 + 4;
           el.style.left = Math.max(hw, Math.min(w - hw, px[i])) + "px";
           el.style.top  = Math.max(hh, Math.min(h - hh, py[i])) + "px";
           const scale = 1 + 0.08 * Math.sin(time * 0.4 + i * 1.2);
