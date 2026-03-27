@@ -227,8 +227,10 @@ export default function Education() {
       for (let i = 0; i < CERT_COUNT; i++) {
         const el = labelRefs.current[i];
         if (el) {
-          el.style.left = px[i] + "px";
-          el.style.top  = py[i] + "px";
+          const hw = el.offsetWidth  * 0.5 + 4;
+          const hh = el.offsetHeight * 0.5 + 4;
+          el.style.left = Math.max(hw, Math.min(w - hw, px[i])) + "px";
+          el.style.top  = Math.max(hh, Math.min(h - hh, py[i])) + "px";
           const scale = 1 + 0.08 * Math.sin(time * 0.4 + i * 1.2);
           el.style.transform = `translate(-50%,-50%) scale(${scale.toFixed(3)})`;
         }
@@ -426,7 +428,7 @@ export default function Education() {
           </div>
 
           {/* canvas + label overlays */}
-          <div className="relative flex-1">
+          <div className="relative flex-1 overflow-hidden">
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
 
             {CERTS.map((cert, i) => (
